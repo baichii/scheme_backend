@@ -1,0 +1,23 @@
+.vscode/
+*.pyc
+*.log
+scheduler*
+__pycache__/
+.idea/
+*/.pytest_cache/
+
+# mac
+.DS_Store
+
+# pyenv
+.python-version
+uv.lock
+
+# custom
+pythonlib/
+
+# dev
+/docs/dev.md
+.env
+
+
