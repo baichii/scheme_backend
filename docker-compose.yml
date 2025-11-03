@@ -1,2 +1,62 @@
-# services:
-#   scheme-backend:
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: scheme_postgres
+    environment:
+      POSTGRES_DB: scheme_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d scheme_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - scheme_network
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    container_name: scheme_minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: admin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - scheme_network
+    restart: unless-stopped
+
+networks:
+  scheme_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /usr/data/postgres
+  minio_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /usr/data/minio
