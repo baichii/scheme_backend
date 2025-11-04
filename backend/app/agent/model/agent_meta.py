@@ -1,0 +1,31 @@
+from __future__ import annotations
+
+from datetime import datetime
+from typing import TYPE_CHECKING
+
+import sqlalchemy as sa
+
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from backend.common.model import id_key, snowflake_id_key
+
+
+
+
+
+class AgentMeta:
+
+    __tablename__ = "agent_meta"
+
+    agent_id: Mapped[snowflake_id_key] = mapped_column(init=False)
+    agent_name: Mapped[str] = mapped_column(sa.String(64), unique=True, comment="智能体名称")
+    agent_load: Mapped[str] = mapped_column(sa.String(64), unique=True, comment="智能体文件加载名称")
+    agent_desc: Mapped[str] = mapped_column(sa.String(512), comment="智能体描述")
+    agent_url: Mapped[str] = mapped_column(sa.String(64), comment="智能体下载路径")
+    side: Mapped[str] = mapped_column(sa.String(64), comment="智能体默认阵营")
+
+    create_at: Mapped[datetime] = mapped_column(sa.DateTime, default=datetime.now, comment="创建时间")
+
+
+
+
+print(datetime.now())
