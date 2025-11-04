@@ -9,9 +9,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from backend.common.model import id_key, snowflake_id_key
 
 
-
-
-
 class AgentMeta:
 
     __tablename__ = "agent_meta"
@@ -22,10 +19,7 @@ class AgentMeta:
     agent_desc: Mapped[str] = mapped_column(sa.String(512), comment="智能体描述")
     agent_url: Mapped[str] = mapped_column(sa.String(64), comment="智能体下载路径")
     side: Mapped[str] = mapped_column(sa.String(64), comment="智能体默认阵营")
-
+    param_schema: Mapped[dict] = mapped_column(sa.JSON, comment="智能体参数声明")
+    supported_env_templates: Mapped[list[str]] = mapped_column(sa.ARRAY(sa.String(64)), comment="支持的环境模板列表")
     create_at: Mapped[datetime] = mapped_column(sa.DateTime, default=datetime.now, comment="创建时间")
-
-
-
-
-print(datetime.now())
+    update_at: Mapped[datetime] = mapped_column(sa.DateTime, default=datetime.now, onupdate=datetime.now, comment="更新时间")

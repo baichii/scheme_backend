@@ -2,7 +2,7 @@ from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from functools import lru_cache
 
-from src.core.path_conf import BASE_PATH
+from backend.core.path_conf import BASE_PATH
 
 
 class Settings(BaseSettings):
@@ -20,6 +20,10 @@ class Settings(BaseSettings):
     R2_ACCOUNT_ID: str
     R2_API: str
 
+    # datatime
+    DATATIME_TIMEZONE: str = "Asia/Shanghai"
+    DATATIME_FORMAT: str = "%Y-%m-%d %H:%M:%S"
+
 
     # # matrix rabbitmq 配置
     # MATRIX_RABBITMQ_HOST: str = "localhost"
@@ -33,5 +37,5 @@ print("BASE_PATH: ", BASE_PATH)
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
-
+#
 settings = get_settings()

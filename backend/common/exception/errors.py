@@ -14,10 +14,6 @@ class BaseExceptionMixin(Exception):
         self.background = background
 
 
-class A:
-
-    def __init__(self, a, *, b):
-        pass
+    
 
 
-a = A(a=10, b=20)
