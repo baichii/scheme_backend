@@ -19,5 +19,5 @@ pythonlib/
 # dev
 /docs/dev.md
 .env
-
+/auxiliary
 

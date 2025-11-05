@@ -6,7 +6,7 @@ from pydantic import ConfigDict, Field, field_validator
 from backend.common.schema import SchemaBase
 
 
-class AgentMetaSchemeBase(SchemaBase):
+class AgentMeta(SchemaBase):
 
     agent_id: int = Field(description="智能体唯一id")
     agent_name: str = Field(description="智能体名称")
