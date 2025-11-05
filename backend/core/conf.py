@@ -15,15 +15,16 @@ class Settings(BaseSettings):
         cache_strings=True,
     )
 
-
-    # cloudflare 配置
-    R2_ACCOUNT_ID: str
-    R2_API: str
-
     # datatime
     DATATIME_TIMEZONE: str = "Asia/Shanghai"
     DATATIME_FORMAT: str = "%Y-%m-%d %H:%M:%S"
 
+    # agent
+    AGENT_MINIO_HOST: str = "localhost"
+    AGENT_MINIO_PORT: int = 9000
+    AGENT_MINIO_USER: str = "admin"
+    AGENT_MINIO_PASSWORD: str = "admin"
+    AGENT_BUCKET: str = "agent"
 
     # # matrix rabbitmq 配置
     # MATRIX_RABBITMQ_HOST: str = "localhost"
@@ -31,8 +32,6 @@ class Settings(BaseSettings):
     # MATRIX_RABBITMQ_USER: str = "guest"
     # MATRIX_RABBITMQ_PASSWORD: str = "guest"
 
-
-print("BASE_PATH: ", BASE_PATH)
 
 @lru_cache
 def get_settings() -> Settings:

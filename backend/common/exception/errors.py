@@ -14,6 +14,11 @@ class BaseExceptionMixin(Exception):
         self.background = background
 
 
+class HttpError(HTTPException):
+    """http 异常"""
+    def __init__(self, code:int , msg: Any = None, headers: dict[str, Any] | None = None):
+        super().__init__(status_code=code, detail=msg, headers=headers)
+
     
 
 

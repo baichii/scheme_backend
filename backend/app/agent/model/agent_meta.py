@@ -9,9 +9,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from backend.common.model import id_key, snowflake_id_key
 
 
-class AgentMeta:
+class Agent:
 
-    __tablename__ = "agent_meta"
+    __tablename__ = "agent"
 
     agent_id: Mapped[snowflake_id_key] = mapped_column(init=False)
     agent_name: Mapped[str] = mapped_column(sa.String(64), unique=True, comment="智能体名称")
