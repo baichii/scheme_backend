@@ -35,3 +35,9 @@ snowflake_id_key = Annotated[
         comment='雪花算法主键 ID',
     ),
 ]
+
+
+# 数据库模型基类
+class Base(DeclarativeBase):
+    """所有数据库模型的基类"""
+    pass

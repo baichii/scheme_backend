@@ -6,10 +6,10 @@ from typing import TYPE_CHECKING
 import sqlalchemy as sa
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from backend.common.model import id_key, snowflake_id_key
+from backend.common.model import Base, id_key, snowflake_id_key
 
 
-class Agent:
+class Agent(Base):
 
     __tablename__ = "agent"
 
