@@ -20,4 +20,6 @@ pythonlib/
 /docs/dev.md
 .env
 /auxiliary
+/docker-compose.yml
+
 

@@ -51,10 +51,10 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /Users/jiangzhenjie/dev_data/postgres
+      device: /usr/data/postgres
   minio_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /Users/jiangzhenjie/dev_data/minio
+      device: /usr/data/minio
