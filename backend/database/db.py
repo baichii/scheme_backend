@@ -1,5 +1,4 @@
 import sys
-
 from collections.abc import AsyncGenerator
 from typing import Annotated
 from uuid import uuid4
@@ -10,7 +9,7 @@ from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
     async_sessionmaker,
-    create_async_engine
+    create_async_engine,
 )
 
 from backend.common.log import log
@@ -36,4 +35,72 @@ def create_database_url(*, unittest: bool = False) -> URL:
     return url
 
 
-print(create_database_url())
+def create_async_engine_and_session(url: str | URL) -> tuple[AsyncEngine, async_sessionmaker[AsyncSession]]:
+    """
+    创建数据库引擎和session
+    """
+    try:
+        engine = create_async_engine(
+            url,
+            echo=settings.DATABASE_ECHO,
+            echo_pool=settings.DATABASE_POOL_ECHO,
+            future=True,
+            pool_size=10,
+            max_overflow=20,
+            pool_timeout=30,
+            pool_recycle=3600,
+            pool_pre_ping=True,
+            pool_use_lifo=False,
+        )
+    except Exception as e:
+        log.error("数据库链接失败 {}", e)
+        sys.exit()
+    else:
+        db_session = async_sessionmaker(
+            bind=engine,
+            class_=AsyncSession,
+            autoflush=False,
+            expire_on_commit=False,
+        )
+        return engine, db_session
+
+
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
+    """
+    获取数据库会话
+    """
+    async with async_db_session() as session:
+        yield session
+
+
+async def get_db_transaction() -> AsyncGenerator[AsyncSession, None]:
+    """
+    获取数据库会话，开启事务
+    """
+    async with async_db_session.begin() as session:
+        yield session
+
+
+async def create_table() -> None:
+    """
+    创建数据库表
+    """
+    async with async_engine.begin() as conn:
+        await conn.run_sync(MappedBase.metadata.create_all)
+
+
+def uuid4_str() -> str:
+    """
+    生成uuid4字符串
+    """
+    return str(uuid4())
+
+
+SQLALCHEMY_DATABASE_URL = create_database_url()
+
+# SALA 异步引擎和会话
+async_engine, async_db_session = create_async_engine_and_session(SQLALCHEMY_DATABASE_URL)
+
+# Session Annotated
+CurrentSession = Annotated[AsyncSession, Depends(get_db)]
+CurrentSessionTransaction = Annotated[AsyncSession, Depends(get_db_transaction)]

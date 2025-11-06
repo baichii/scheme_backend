@@ -3,8 +3,8 @@
 
 生成一个包含示例智能体代码的 ZIP 文件，用于测试上传功能
 """
-import zipfile
 import json
+import zipfile
 from pathlib import Path
 
 

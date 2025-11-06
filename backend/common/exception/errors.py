@@ -3,6 +3,7 @@ from typing import Any
 from fastapi import HTTPException
 from starlette.background import BackgroundTask
 
+
 class BaseExceptionMixin(Exception):
     """基础异常混入类"""
 

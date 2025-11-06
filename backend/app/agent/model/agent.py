@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import sqlalchemy as sa
+from sqlalchemy.orm import Mapped, mapped_column
 
-from sqlalchemy.orm import Mapped, mapped_column, relationship
 from backend.common.model import Base, snowflake_id_key
 
 

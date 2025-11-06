@@ -1,7 +1,6 @@
 import inspect
 import logging
 import os
-import re
 import sys
 
 from loguru import logger

@@ -1,11 +1,8 @@
-from typing import Any, Generic, TypeVar
+from typing import Any, TypeVar
 
-from fastapi import Response
 from pydantic import BaseModel, Field
 
 from backend.common.response.response_code import CustomResponse, CustomResponseCode
-from backend.utils.serializers import MsgSpecJsonResponse
-
 
 SchemaT = TypeVar("SchemaT")
 

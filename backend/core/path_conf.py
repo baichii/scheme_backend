@@ -1,6 +1,5 @@
 from pathlib import Path
 
-
 # 项目根目录 xx\src
 BASE_PATH = Path(__file__).resolve().parent.parent
 

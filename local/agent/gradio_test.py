@@ -13,10 +13,9 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 import gradio as gr
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.app.agent.services.agent_service import agent_service
 from backend.app.agent.schema.agent_meta import AgentUploadRequest
+from backend.app.agent.services.agent_service import agent_service
 from backend.database import async_session_factory, init_db
 
 

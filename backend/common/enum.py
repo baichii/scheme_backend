@@ -1,5 +1,4 @@
-from enum import Enum
-from enum import IntEnum as SourceIntEnum
+from enum import Enum, IntEnum as SourceIntEnum
 from typing import Any, TypeVar
 
 T = TypeVar("T", bound=Enum)

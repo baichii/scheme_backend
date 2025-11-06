@@ -1,9 +1,5 @@
-from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
-
-from backend.utils.timezone import timezone
-
 
 
 class SchemaBase(BaseModel):

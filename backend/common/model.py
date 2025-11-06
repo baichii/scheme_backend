@@ -1,9 +1,15 @@
 from datetime import datetime
-from typing import Annotated, Type, Any
+from typing import Annotated, Any
 
 from sqlalchemy import BigInteger, DateTime, Text, TypeDecorator
 from sqlalchemy.dialects.mysql import LONGTEXT
-from sqlalchemy.orm import DeclarativeBase, mapped_column, MappedAsDataclass, Mapped, declared_attr
+from sqlalchemy.orm import (
+    DeclarativeBase,
+    Mapped,
+    MappedAsDataclass,
+    declared_attr,
+    mapped_column,
+)
 
 from backend.core.conf import settings
 from backend.utils.snowflake import snowflake

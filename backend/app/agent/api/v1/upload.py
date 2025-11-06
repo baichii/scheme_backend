@@ -1,16 +1,15 @@
 import json
-from typing import Annotated
 
-from fastapi import APIRouter, File, UploadFile, Form, Depends
+from fastapi import APIRouter, Depends, File, Form, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.agent.schema.agent_meta import AgentUploadRequest
 from backend.app.agent.service.agent_service import agent_service
-from backend.common.response.response_schema import ResponseModel, ResponseBase
+from backend.common.response.response_schema import ResponseModel
 
 router = APIRouter()
 
-from backend.database import get_db
+from backend.database.db import get_db
 
 
 @router.post("/agent/upload", summary="智能体文件上传")

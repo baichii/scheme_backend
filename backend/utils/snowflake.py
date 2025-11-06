@@ -1,6 +1,5 @@
 
 import time
-
 from dataclasses import dataclass
 
 from backend.common.dataclasses import SnowflakeInfo

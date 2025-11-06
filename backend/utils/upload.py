@@ -13,9 +13,9 @@ class MinIOUploader:
     def __init__(self):
         """初始化 MinIO 客户端"""
         self.client = Minio(
-            f"{settings.AGENT_MINIO_HOST}:{settings.AGENT_MINIO_PORT}",
-            access_key=settings.AGENT_MINIO_USER,
-            secret_key=settings.AGENT_MINIO_PASSWORD,
+            settings.MINIO_ENDPOINT,
+            access_key=settings.MINIO_ROOT_USER,
+            secret_key=settings.MINIO_ROOT_PASSWORD,
             secure=False  # 如果使用 HTTPS，设置为 True
         )
         self.bucket_name = settings.AGENT_BUCKET

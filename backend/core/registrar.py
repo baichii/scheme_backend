@@ -1,19 +1,14 @@
-import os
 
 from contextlib import asynccontextmanager
 
-from fastapi import Depends, FastAPI
-from fastapi_limiter import FastAPILimiter
+from fastapi import FastAPI
 from fastapi_pagination import add_pagination
 
-from tortoise.contrib.fastapi import RegisterTortoise
-
 from backend.app.router import route
-from backend.common.log import setup_logging, set_custom_logfile
+from backend.common.log import set_custom_logfile, setup_logging
 from backend.core.conf import settings
 from backend.utils.health_check import ensure_unique_route_names
 from backend.utils.openapi import simplify_operation_ids
-
 
 
 @asynccontextmanager

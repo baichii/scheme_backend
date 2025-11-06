@@ -1,8 +1,7 @@
-from typing import Any, Literal
-
-from pydantic import model_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
 from functools import lru_cache
+from typing import Literal
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from backend.core.path_conf import BASE_PATH
 
@@ -21,7 +20,7 @@ class Settings(BaseSettings):
     ENVIRONMENT: Literal["dev", "prod"] = "dev"
 
     # fastapi
-    FAST_API_V1_PATH: str = "api/v1"
+    FAST_API_V1_PATH: str = "/api/v1"
     FASTAPI_TITLE: str = "Scheme Backend"
     FASTAPI_VERSION: str = "0.0.1"
     FASTAPI_DESCRIPTION: str = "Scheme Backend By FastAPI"
@@ -49,12 +48,11 @@ class Settings(BaseSettings):
     DATABASE_SCHEMA: str = "scheme_backend"
     DATABASE_CHARSET: str = "utf8mb4"
 
-
-
     # minio 用户配置
     MINIO_ENDPOINT: str
     MINIO_ROOT_USER: str
     MINIO_ROOT_PASSWORD: str
+    AGENT_BUCKET: str = "agent"
 
     # log
     LOG_STD_LEVEL: str = "INFO"
