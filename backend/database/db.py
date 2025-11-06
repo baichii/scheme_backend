@@ -81,7 +81,7 @@ async def get_db_transaction() -> AsyncGenerator[AsyncSession, None]:
         yield session
 
 
-async def create_table() -> None:
+async def create_tables() -> None:
     """
     创建数据库表
     """

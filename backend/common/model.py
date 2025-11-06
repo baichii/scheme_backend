@@ -3,6 +3,7 @@ from typing import Annotated, Any
 
 from sqlalchemy import BigInteger, DateTime, Text, TypeDecorator
 from sqlalchemy.dialects.mysql import LONGTEXT
+from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,
@@ -96,7 +97,8 @@ class DateTimeMixin(MappedAsDataclass):
         comment="更新时间"
     )
 
-class MappedBase:
+
+class MappedBase(AsyncAttrs, DeclarativeBase):
     """声明式基类, 作为所有基类或数据模型的父类存在"""
 
     @declared_attr.directive

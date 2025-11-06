@@ -9,6 +9,7 @@ from backend.common.log import set_custom_logfile, setup_logging
 from backend.core.conf import settings
 from backend.utils.health_check import ensure_unique_route_names
 from backend.utils.openapi import simplify_operation_ids
+from backend.database.db import create_tables
 
 
 @asynccontextmanager
@@ -18,8 +19,8 @@ async def register_init(app: FastAPI):
     """
 
     # 创建数据库 & 连接db
-    pass
-
+    await create_tables()
+    yield
 
 
 def register_app() -> FastAPI:

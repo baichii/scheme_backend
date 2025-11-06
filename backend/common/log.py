@@ -64,7 +64,6 @@ def set_custom_logfile():
     log_path = LOG_DIR
     if not os.path.exists(log_path):
         os.makedirs(log_path)
-        os.mkdir(log_path)
 
     # 日志文件
     log_access_file = os.path.join(log_path, settings.LOG_ACCESS_FILENAME)
