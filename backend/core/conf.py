@@ -59,7 +59,7 @@ class Settings(BaseSettings):
     LOG_ACCESS_FILE_LEVEL: str = 'INFO'
     LOG_ERROR_FILE_LEVEL: str = 'ERROR'
     LOG_STD_FORMAT: str = (
-        '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</> | <lvl>{level: <8}</> | <cyan>{request_id}</> | <lvl>{message}</>'
+        '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</> | <lvl>{level: <8}</> | <lvl>{message}</>'
     )
     LOG_FILE_FORMAT: str = '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</> | <lvl>{level: <8}</> | <lvl>{message}</>'
     LOG_ACCESS_FILENAME: str = 'scheme_backend_access.log'
