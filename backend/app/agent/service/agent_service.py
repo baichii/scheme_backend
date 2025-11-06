@@ -27,14 +27,8 @@ class AgentService:
         Returns:
             dict: 包含上传结果的字典
 
-        Raises:
-            ValueError: 参数验证失败
-            Exception: 上传或数据库操作失败
         """
-        # 1. 检查智能体名称是否已存在
-        existing_agent = await crud_agent.get_by_name(db, metadata.agent_name)
-        if existing_agent:
-            raise ValueError(f"智能体名称 '{metadata.agent_name}' 已存在")
+
 
         # 2. 读取文件内容
         file_bytes = await file.read()
@@ -52,9 +46,8 @@ class AgentService:
             raise ValueError("上传的文件不是有效的 zip 文件")
 
         # 4. 生成唯一的文件名和加载名
-        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         unique_id = snowflake.generate()
-        object_name = f"agents/{unique_id}_{timestamp}.zip"
+        object_name = f"agents/{unique_id}_{metadata.agent_load}.zip"
         agent_load = metadata.agent_file.rsplit(".", 1)[0]  # 去除文件扩展名
 
         # 5. 上传文件到 MinIO

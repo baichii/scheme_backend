@@ -15,12 +15,6 @@ class CRUDAgent(CRUDPlus[Agent]):
         """根据智能体ID获取智能体"""
         return await db.get(Agent, agent_id)
 
-    async def get_by_name(self, db: AsyncSession, agent_name: str) -> Agent | None:
-        """根据智能体名称获取智能体"""
-        stmt = select(Agent).where(Agent.agent_name == agent_name)
-        result = await db.execute(stmt)
-        return result.scalar_one_or_none()
-
     async def create(self, db: AsyncSession, obj_in: AgentCreateRequest) -> Agent:
         """创建智能体"""
         agent = Agent(

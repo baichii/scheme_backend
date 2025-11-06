@@ -5,7 +5,7 @@ from datetime import datetime
 import sqlalchemy as sa
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from backend.common.model import Base, id_key, snowflake_id_key
+from backend.common.model import Base, snowflake_id_key
 
 
 class Agent(Base):

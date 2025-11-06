@@ -5,6 +5,8 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "fastapi-limiter>=0.1.6",
+    "fastapi-pagination>=0.15.0",
     "fastapi[standard]>=0.119.1",
     "gradio>=5.49.1",
     "loguru>=0.7.3",
@@ -14,4 +16,5 @@ dependencies = [
     "ruff>=0.14.1",
     "sqlalchemy>=2.0.44",
     "sqlalchemy-crud-plus>=1.13.0",
+    "tortoise-orm[psycopg]>=0.25.1",
 ]

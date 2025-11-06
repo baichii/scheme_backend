@@ -5,13 +5,11 @@ from fastapi import APIRouter, File, UploadFile, Form, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.agent.schema.agent_meta import AgentUploadRequest
-from backend.app.agent.services.agent_service import agent_service
+from backend.app.agent.service.agent_service import agent_service
 from backend.common.response.response_schema import ResponseModel, ResponseBase
 
 router = APIRouter()
 
-
-# 数据库依赖注入
 from backend.database import get_db
 
 
