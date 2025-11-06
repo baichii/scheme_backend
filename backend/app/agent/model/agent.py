@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from datetime import datetime
-
 import sqlalchemy as sa
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -20,5 +18,3 @@ class Agent(Base):
     side: Mapped[str] = mapped_column(sa.String(64), comment="智能体默认阵营")
     param_schema: Mapped[dict] = mapped_column(sa.JSON, comment="智能体参数声明")
     supported_env_templates: Mapped[list[str]] = mapped_column(sa.ARRAY(sa.String(64)), comment="支持的环境模板列表")
-    create_at: Mapped[datetime] = mapped_column(sa.DateTime, default=datetime.now, comment="创建时间")
-    update_at: Mapped[datetime] = mapped_column(sa.DateTime, default=datetime.now, onupdate=datetime.now, comment="更新时间")
