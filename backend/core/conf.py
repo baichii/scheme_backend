@@ -1,3 +1,5 @@
+from typing import Any, Literal
+
 from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from functools import lru_cache
@@ -19,12 +21,16 @@ class Settings(BaseSettings):
     DATATIME_TIMEZONE: str = "Asia/Shanghai"
     DATATIME_FORMAT: str = "%Y-%m-%d %H:%M:%S"
 
-    # agent
-    AGENT_MINIO_HOST: str = "localhost"
-    AGENT_MINIO_PORT: int = 9000
-    AGENT_MINIO_USER: str = "admin"
-    AGENT_MINIO_PASSWORD: str = "admin"
-    AGENT_BUCKET: str = "agent"
+    # .env 数据库
+    DATABASE_TYPE: Literal["postgresql", "mysql"]
+    DATABASE_HOST: str
+    DATABASE_PORT: int
+    DATABASE_USER: str
+    DATABASE_PASSWORD: str
+
+    # minio 用户配置
+    MINIO_ROOT_USER: str
+    MINIO_ROOT_PASSWORD: str
 
     # # matrix rabbitmq 配置
     # MATRIX_RABBITMQ_HOST: str = "localhost"
@@ -38,3 +44,5 @@ def get_settings() -> Settings:
     return Settings()
 #
 settings = get_settings()
+
+print(settings.MINI)
