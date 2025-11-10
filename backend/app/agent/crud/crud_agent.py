@@ -1,10 +1,9 @@
-
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy_crud_plus import CRUDPlus
 
 from backend.app.agent.model.agent import Agent
-from backend.app.agent.schema.agent_meta import AgentCreateRequest
+from backend.app.agent.schema.agent import AgentCreateParam
 
 
 class CRUDAgent(CRUDPlus[Agent]):
@@ -14,16 +13,16 @@ class CRUDAgent(CRUDPlus[Agent]):
         """根据智能体ID获取智能体"""
         return await db.get(Agent, agent_id)
 
-    async def create(self, db: AsyncSession, obj_in: AgentCreateRequest) -> Agent:
+    async def create(self, db: AsyncSession, obj: AgentCreateParam) -> Agent:
         """创建智能体"""
         agent = Agent(
-            agent_name=obj_in.agent_name,
-            agent_load=obj_in.agent_load,
-            agent_desc=obj_in.agent_desc,
-            agent_url=obj_in.agent_url,
-            side=obj_in.side,
-            param_schema=obj_in.param_schema,
-            supported_env_templates=obj_in.supported_env_templates,
+            agent_name=obj.agent_name,
+            agent_load=obj.agent_load,
+            agent_desc=obj.agent_desc,
+            agent_url=obj.agent_url,
+            side=obj.side,
+            param_schema=obj.param_schema,
+            supported_env_templates=obj.supported_env_templates,
         )
         db.add(agent)
         await db.commit()
@@ -48,6 +47,3 @@ class CRUDAgent(CRUDPlus[Agent]):
 
 # 单例模式
 crud_agent = CRUDAgent(Agent)
-
-
-

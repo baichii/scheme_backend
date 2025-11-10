@@ -16,7 +16,7 @@ class MinIOUploader:
             settings.MINIO_ENDPOINT,
             access_key=settings.MINIO_ROOT_USER,
             secret_key=settings.MINIO_ROOT_PASSWORD,
-            secure=False  # 如果使用 HTTPS，设置为 True
+            secure=False,  # 如果使用 HTTPS，设置为 True
         )
         self.bucket_name = settings.AGENT_BUCKET
         self._ensure_bucket_exists()
@@ -30,10 +30,7 @@ class MinIOUploader:
             raise Exception(f"创建 bucket 失败: {str(e)}")
 
     def upload_file(
-        self,
-        object_name: str,
-        file_data: bytes | BinaryIO,
-        content_type: str = "application/octet-stream"
+        self, object_name: str, file_data: bytes | BinaryIO, content_type: str = "application/octet-stream"
     ) -> str:
         """
         上传文件到 MinIO
@@ -63,11 +60,7 @@ class MinIOUploader:
 
             # 上传文件
             self.client.put_object(
-                self.bucket_name,
-                object_name,
-                file_data,
-                file_size,
-                content_type=content_type
+                self.bucket_name, object_name, file_data, file_size, content_type=content_type
             )
 
             # 返回文件路径

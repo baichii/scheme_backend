@@ -23,15 +23,15 @@ def create_database_url(*, unittest: bool = False) -> URL:
     """
 
     url = URL.create(
-        drivername='mysql+asyncmy' if settings.DATABASE_TYPE == 'mysql' else 'postgresql+asyncpg',
+        drivername="mysql+asyncmy" if settings.DATABASE_TYPE == "mysql" else "postgresql+asyncpg",
         username=settings.DATABASE_USER,
         password=settings.DATABASE_PASSWORD,
         host=settings.DATABASE_HOST,
         port=settings.DATABASE_PORT,
-        database=settings.DATABASE_SCHEMA if not unittest else f'{settings.DATABASE_SCHEMA}_test',
+        database=settings.DATABASE_SCHEMA if not unittest else f"{settings.DATABASE_SCHEMA}_test",
     )
     if settings.DATABASE_TYPE == "mysql":
-        url.update_query_dict({'charset': settings.DATABASE_CHARSET})
+        url.update_query_dict({"charset": settings.DATABASE_CHARSET})
     return url
 
 
@@ -75,7 +75,7 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
 
 async def get_db_transaction() -> AsyncGenerator[AsyncSession, None]:
     """
-    获取数据库会话，开启事务
+    获取带有事务的数据库会话
     """
     async with async_db_session.begin() as session:
         yield session
@@ -96,6 +96,7 @@ def uuid4_str() -> str:
     return str(uuid4())
 
 
+# SQLA 数据库链接
 SQLALCHEMY_DATABASE_URL = create_database_url()
 
 # SALA 异步引擎和会话

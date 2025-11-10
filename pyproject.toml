@@ -23,13 +23,13 @@ dependencies = [
 
 [tool.ruff]
 line-length = 108
-select = [
+lint.select = [
     "E",   # pycodestyle errors
     "F",   # pyflakes
     "I",   # isort
     "B",   # flake8-bugbear
 ]
-ignore = []
+lint.ignore = []
 exclude = [
     ".venv",
     "migrations",
@@ -43,7 +43,7 @@ indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "lf"
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 combine-as-imports = true
 known-first-party = ["backend"]
 known-third-party = ["numpy", "pandas", "requests"]

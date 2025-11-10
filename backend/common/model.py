@@ -26,8 +26,8 @@ id_key = Annotated[
         index=True,
         autoincrement=True,
         sort_order=-999,
-        comment="主键ID"
-    )
+        comment="主键ID",
+    ),
 ]
 
 
@@ -42,14 +42,14 @@ snowflake_id_key = Annotated[
         index=True,
         default=snowflake.generate,
         sort_order=-999,
-        comment='雪花算法主键 ID',
+        comment="雪花算法主键 ID",
     ),
 ]
 
 
-
 class UniversalText(TypeDecorator[str]):
     """通用文本类型，用于存储任意文本"""
+
     impl = LONGTEXT if settings.DATABASE_TYPE == "mysql" else Text
     cache_ok = True
 
@@ -62,6 +62,7 @@ class UniversalText(TypeDecorator[str]):
 
 class TimeZone(TypeDecorator[datetime]):
     """兼容性时区类型，用于存储 datetime 类型的时间"""
+
     impl = DateTime(timezone=True)
     cache_ok = True
 
@@ -82,6 +83,7 @@ class TimeZone(TypeDecorator[datetime]):
 
 class DateTimeMixin(MappedAsDataclass):
     """日期时间 mixin数据类"""
+
     create_at: Mapped[datetime] = mapped_column(
         TimeZone,
         init=False,
@@ -89,7 +91,7 @@ class DateTimeMixin(MappedAsDataclass):
         sort_order=999,
         comment="创建时间"
     )
-    update_at: Mapped[datetime] = mapped_column(
+    update_at: Mapped[datetime | None] = mapped_column(
         TimeZone,
         init=False,
         onupdate=timezone.now,
@@ -118,9 +120,11 @@ class DataClassBase(MappedAsDataclass, MappedBase):
 
     `MappedAsDataclass <https://docs.sqlalchemy.org/en/20/orm/dataclasses.html#orm-declarative-native-dataclasses>`__
     """
-    __abstract__  = True
 
-class Base(DeclarativeBase, DateTimeMixin):
+    __abstract__ = True
+
+
+class Base(DataClassBase, DateTimeMixin):
     """
     声明性数类据库模型的基类, 带有数据类集成, 并包含 MiXin 数据类基础表结构
     """

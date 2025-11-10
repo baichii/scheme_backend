@@ -3,7 +3,7 @@ services:
     image: postgres:16-alpine
     container_name: scheme_postgres
     environment:
-      POSTGRES_DB: scheme_db
+      POSTGRES_DB: scheme_backend
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin123
       POSTGRES_HOST_AUTH_METHOD: scram-sha-256
