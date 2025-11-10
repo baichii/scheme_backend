@@ -1,7 +1,6 @@
 from datetime import datetime
 
-from pydantic import Field, ConfigDict
-
+from pydantic import ConfigDict, Field
 
 from backend.common.schema import SchemaBase
 
@@ -17,6 +16,9 @@ class EnvInstanceParamBase(SchemaBase):
 class CreateEnvInstanceParam(EnvInstanceParamBase):
     """创建环境配置实例参数"""
 
+
+class UpdateEnvInstanceParam(EnvInstanceParamBase):
+    """更新环境配置实例参数"""
 
 class GetEnvInstanceDetail(EnvInstanceParamBase):
     """环境配置实例详情"""

@@ -2,8 +2,7 @@ from fastapi import APIRouter
 
 from backend.app.env.schema.env_template import CreateEnvTemplateParam, GetEnvTemplateDetail
 from backend.app.env.service.env_template_service import env_template_service
-from backend.common.response.response_schema import ResponseModel, response_base, \
-    ResponseSchemaModel
+from backend.common.response.response_schema import ResponseModel, ResponseSchemaModel, response_base
 from backend.database.db import CurrentSession, CurrentSessionTransaction
 
 router = APIRouter()
@@ -44,5 +43,14 @@ async def delete_env_template(db: CurrentSessionTransaction, pk: int) -> Respons
     """根据ID删除环境配置模版"""
     count = await env_template_service.delete(db=db, pk=pk)
     if count > 0:
+        return response_base.success()
+    return response_base.fail()
+
+
+@router.delete("/all", summary="删除所有环境配置模版")
+async def delete_all_env_templates(db: CurrentSessionTransaction) -> ResponseModel:
+    """删除所有环境配置模版"""
+    count = await env_template_service.delete_all(db=db)
+    if count >= 0:
         return response_base.success()
     return response_base.fail()

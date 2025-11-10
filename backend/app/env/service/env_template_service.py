@@ -49,5 +49,17 @@ class EnvTemplateService:
         count = await env_template_dao.delete(db, pk)
         return count
 
+    @staticmethod
+    async def delete_all(*, db: AsyncSession) -> int:
+        """删除所有环境配置模版
+        fixme: 优化一下，避免遍历删除
+        """
+        env_templates = await env_template_dao.get_all(db)
+        count = 0
+        for env_template in env_templates:
+            await env_template_dao.delete(db, env_template.id)
+            count += 1
+        return count
+
 
 env_template_service: EnvTemplateService = EnvTemplateService()
