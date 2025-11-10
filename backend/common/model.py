@@ -116,7 +116,7 @@ class DataClassBase(MappedAsDataclass, MappedBase):
     __abstract__ = True
 
 
-class Base(DeclarativeBase, DateTimeMixin):
+class Base(DataClassBase, DateTimeMixin):
     """
     声明性数类据库模型的基类, 带有数据类集成, 并包含 MiXin 数据类基础表结构
     """

@@ -1,4 +1,4 @@
-from typing import Any, TypeVar
+from typing import Any, Generic, TypeVar
 
 from pydantic import BaseModel, Field
 
@@ -24,7 +24,7 @@ class ResponseModel(BaseModel):
     data: Any | None = Field(None, description="返回数据")
 
 
-class ResponseSchemaModel(ResponseModel):
+class ResponseSchemaModel(ResponseModel, Generic[SchemaT]):
     data: SchemaT
 
 
