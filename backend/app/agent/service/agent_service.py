@@ -5,13 +5,12 @@ from fastapi import UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.agent.crud.crud_agent import crud_agent
-from backend.app.agent.schema.agent_meta import AgentCreateRequest, AgentUploadRequest
+from backend.app.agent.schema.agent import AgentCreateParam, AgentUploadRequest
 from backend.utils.snowflake import snowflake
 from backend.utils.upload import minio_uploader
 
 
 class AgentService:
-
     @staticmethod
     async def upload(db: AsyncSession, file: UploadFile, metadata: AgentUploadRequest) -> dict:
         """
@@ -27,11 +26,10 @@ class AgentService:
 
         """
 
-
-        # 2. 读取文件内容
+        # 读取文件内容
         file_bytes = await file.read()
 
-        # 3. 验证是否为有效的 zip 文件
+        # 验证是否为有效的 zip 文件
         try:
             zip_file = zipfile.ZipFile(BytesIO(file_bytes))
             file_list = zip_file.namelist()
@@ -43,35 +41,33 @@ class AgentService:
         except zipfile.BadZipFile:
             raise ValueError("上传的文件不是有效的 zip 文件")
 
-        # 4. 生成唯一的文件名和加载名
+        # 生成唯一的文件名和加载名
         unique_id = snowflake.generate()
         object_name = f"agents/{unique_id}_{metadata.agent_load}.zip"
         agent_load = metadata.agent_file.rsplit(".", 1)[0]  # 去除文件扩展名
 
-        # 5. 上传文件到 MinIO
+        # 上传文件到 MinIO
         try:
             agent_url = minio_uploader.upload_file(
-                object_name=object_name,
-                file_data=file_bytes,
-                content_type="application/zip"
+                object_name=object_name, file_data=file_bytes, content_type="application/zip"
             )
         except Exception as e:
             raise Exception(f"文件上传到 MinIO 失败: {str(e)}")
 
-        # 6. 创建数据库记录
+        # 创建数据库记录
         try:
             # 将 supported_env_templates 的 int 列表转换为 str 列表
             supported_env_templates = [str(t) for t in metadata.supported_env_templates]
 
             # 创建请求对象
-            create_request = AgentCreateRequest(
+            create_request = AgentCreateParam(
                 agent_name=metadata.agent_name,
                 agent_load=agent_load,
                 agent_desc=metadata.agent_desc,
                 agent_url=agent_url,
                 side=metadata.side or "unknown",  # 如果 side 为空，使用默认值
                 param_schema=metadata.params_schema,
-                supported_env_templates=supported_env_templates
+                supported_env_templates=supported_env_templates,
             )
 
             agent = await crud_agent.create(db, create_request)
@@ -80,7 +76,7 @@ class AgentService:
                 "agent_id": agent.agent_id,
                 "agent_name": agent.agent_name,
                 "agent_url": agent.agent_url,
-                "message": "智能体上传成功"
+                "message": "智能体上传成功",
             }
 
         except Exception as e:
@@ -92,7 +88,7 @@ class AgentService:
             raise Exception(f"数据库操作失败: {str(e)}")
 
     @staticmethod
-    async def create(db: AsyncSession, agent_data: AgentCreateRequest):
+    async def create(db: AsyncSession, agent_data: AgentCreateParam):
         """创建智能体"""
         return await crud_agent.create(db, agent_data)
 
