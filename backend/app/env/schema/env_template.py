@@ -25,4 +25,4 @@ class GetEnvTemplateDetail(EnvTemplateParamBase):
     name: str = Field(description="环境配置模版名称")
     param_schema: dict = Field(description="环境配置模版参数 schema")
     create_at: datetime = Field(description="创建时间")
-    update_at: datetime = Field(None, description="更新时间")
+    update_at: datetime | None = Field(None, description="更新时间")

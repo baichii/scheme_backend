@@ -85,10 +85,18 @@ class DateTimeMixin(MappedAsDataclass):
     """日期时间 mixin数据类"""
 
     create_at: Mapped[datetime] = mapped_column(
-        TimeZone, init=False, default_factory=timezone.now, sort_order=999, comment="创建时间"
+        TimeZone,
+        init=False,
+        default_factory=timezone.now,
+        sort_order=999,
+        comment="创建时间"
     )
-    update_at: Mapped[datetime] = mapped_column(
-        TimeZone, init=False, onupdate=timezone.now, sort_order=999, comment="更新时间"
+    update_at: Mapped[datetime | None] = mapped_column(
+        TimeZone,
+        init=False,
+        onupdate=timezone.now,
+        sort_order=999,
+        comment="更新时间"
     )
 
 
