@@ -5,7 +5,6 @@ from backend.core.conf import settings
 
 
 class Timezone:
-
     def __init__(self, tz: str = settings.DATATIME_TIMEZONE) -> None:
         """
         初始化时区

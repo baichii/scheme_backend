@@ -23,5 +23,6 @@ class _EnumBase:
 class IntEnum(_EnumBase, SourceIntEnum):
     """整数枚举基类"""
 
+
 class StrEnum(_EnumBase, Enum):
     """字符串枚举基类"""

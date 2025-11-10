@@ -1,4 +1,3 @@
-
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -7,9 +6,9 @@ from fastapi_pagination import add_pagination
 from backend.app.router import route
 from backend.common.log import set_custom_logfile, setup_logging
 from backend.core.conf import settings
+from backend.database.db import create_tables
 from backend.utils.health_check import ensure_unique_route_names
 from backend.utils.openapi import simplify_operation_ids
-from backend.database.db import create_tables
 
 
 @asynccontextmanager

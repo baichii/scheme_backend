@@ -1,4 +1,3 @@
-
 import time
 from dataclasses import dataclass
 
@@ -52,9 +51,9 @@ class Snowflake:
         :param sequence: 起始序列号
         """
         if cluster_id < 0 or cluster_id > SnowflakeConfig.MAX_DATACENTER_ID:
-            raise errors.RequestError(msg=f'集群编号必须在 0-{SnowflakeConfig.MAX_DATACENTER_ID} 之间')
+            raise errors.RequestError(msg=f"集群编号必须在 0-{SnowflakeConfig.MAX_DATACENTER_ID} 之间")
         if node_id < 0 or node_id > SnowflakeConfig.MAX_WORKER_ID:
-            raise errors.RequestError(msg=f'节点编号必须在 0-{SnowflakeConfig.MAX_WORKER_ID} 之间')
+            raise errors.RequestError(msg=f"节点编号必须在 0-{SnowflakeConfig.MAX_WORKER_ID} 之间")
 
         self.node_id = node_id
         self.cluster_id = cluster_id
@@ -84,7 +83,7 @@ class Snowflake:
         timestamp = self._current_millis()
 
         if timestamp < self.last_timestamp:
-            raise errors.ServerError(msg=f'系统时间倒退，拒绝生成 ID 直到 {self.last_timestamp}')
+            raise errors.ServerError(msg=f"系统时间倒退，拒绝生成 ID 直到 {self.last_timestamp}")
 
         if timestamp == self.last_timestamp:
             self.sequence = (self.sequence + 1) & SnowflakeConfig.SEQUENCE_MASK
@@ -111,7 +110,9 @@ class Snowflake:
         :return:
         """
         timestamp = (snowflake_id >> SnowflakeConfig.TIMESTAMP_LEFT_SHIFT) + SnowflakeConfig.EPOCH
-        cluster_id = (snowflake_id >> SnowflakeConfig.DATACENTER_ID_SHIFT) & SnowflakeConfig.MAX_DATACENTER_ID
+        cluster_id = (
+            snowflake_id >> SnowflakeConfig.DATACENTER_ID_SHIFT
+        ) & SnowflakeConfig.MAX_DATACENTER_ID
         node_id = (snowflake_id >> SnowflakeConfig.WORKER_ID_SHIFT) & SnowflakeConfig.MAX_WORKER_ID
         sequence = snowflake_id & SnowflakeConfig.SEQUENCE_MASK
 

@@ -7,7 +7,7 @@ from backend.core.path_conf import BASE_PATH
 
 
 class Settings(BaseSettings):
-    """ 全局配置 """
+    """全局配置"""
 
     model_config = SettingsConfigDict(
         env_file=f"{BASE_PATH}/.env",
@@ -24,9 +24,9 @@ class Settings(BaseSettings):
     FASTAPI_TITLE: str = "Scheme Backend"
     FASTAPI_VERSION: str = "0.0.1"
     FASTAPI_DESCRIPTION: str = "Scheme Backend By FastAPI"
-    FASTAPI_DOCS_URL: str = '/docs'
-    FASTAPI_REDOC_URL: str = '/redoc'
-    FASTAPI_OPENAPI_URL: str | None = '/openapi'
+    FASTAPI_DOCS_URL: str = "/docs"
+    FASTAPI_REDOC_URL: str = "/redoc"
+    FASTAPI_OPENAPI_URL: str | None = "/openapi"
     FASTAPI_STATIC_FILES: bool = False
 
     # datatime
@@ -56,16 +56,16 @@ class Settings(BaseSettings):
 
     # log
     LOG_STD_LEVEL: str = "INFO"
-    LOG_ACCESS_FILE_LEVEL: str = 'INFO'
-    LOG_ERROR_FILE_LEVEL: str = 'ERROR'
+    LOG_ACCESS_FILE_LEVEL: str = "INFO"
+    LOG_ERROR_FILE_LEVEL: str = "ERROR"
     LOG_STD_FORMAT: str = (
-        '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</> | <lvl>{level: <8}</> | <lvl>{message}</>'
+        "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</> | <lvl>{level: <8}</> | <lvl>{message}</>"
     )
-    LOG_FILE_FORMAT: str = '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</> | <lvl>{level: <8}</> | <lvl>{message}</>'
-    LOG_ACCESS_FILENAME: str = 'scheme_backend_access.log'
-    LOG_ERROR_FILENAME: str = 'scheme_backend_error.log'
-
-
+    LOG_FILE_FORMAT: str = (
+        "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</> | <lvl>{level: <8}</> | <lvl>{message}</>"
+    )
+    LOG_ACCESS_FILENAME: str = "scheme_backend_access.log"
+    LOG_ERROR_FILENAME: str = "scheme_backend_error.log"
 
     # # matrix rabbitmq 配置
     # MATRIX_RABBITMQ_HOST: str = "localhost"
@@ -77,5 +77,7 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
+
+
 #
 settings = get_settings()

@@ -23,4 +23,4 @@ async def http_limit_callback(request: Request, response: Response, expire: int)
     HTTP 限流回调
     """
     expires = ceil(expire / 1000)
-    raise errors.HttpError(code=429, msg="请求频率过快，请稍后重试", headers={"Retry-After": str(expires)})
+    raise errors.HTTPError(code=429, msg="请求频率过快，请稍后重试", headers={"Retry-After": str(expires)})
