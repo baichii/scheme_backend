@@ -1,0 +1,15 @@
+import sqlalchemy as sa
+from sqlalchemy.orm import Mapped, mapped_column
+
+from backend.common.model import Base, snowflake_id_key
+
+
+class EnvInstance(Base):
+    """环境配置实例"""
+
+    __tablename__ = "env_instance"
+
+    id: Mapped[int] = mapped_column(snowflake_id_key, primary_key=True, comment="环境配置实例 ID")
+    name: Mapped[str] = mapped_column(sa.String(64), unique=True, comment="环境配置实例名称")
+    template_id: Mapped[int] = mapped_column(comment="环境配置模版 ID")
+    params: Mapped[dict] = mapped_column(sa.JSON, comment="环境配置实例参数")
