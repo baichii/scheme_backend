@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy_crud_plus import CRUDPlus
 
 from backend.app.agent.model.agent_meta import AgentMeta
-from backend.app.agent.schema.agent_meta import CreateAgentParam, CreateAgentInternal
+from backend.app.agent.schema.agent_meta import CreateAgentInternal
 
 
 class CRUDAgentMeta(CRUDPlus[AgentMeta]):

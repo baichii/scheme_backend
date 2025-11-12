@@ -1,14 +1,13 @@
-from collections.abc import Sequence
-
 import zipfile
+from collections.abc import Sequence
 from io import BytesIO
+
 from fastapi import UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.agent.crud.crud_agent_meta import agent_meta_dao
 from backend.app.agent.model.agent_meta import AgentMeta
-from backend.app.agent.schema.agent_meta import CreateAgentParam, CreateAgentInternal
-
+from backend.app.agent.schema.agent_meta import CreateAgentInternal, CreateAgentParam
 from backend.common.exception import errors
 from backend.utils.snowflake import snowflake
 from backend.utils.upload import minio_uploader
@@ -40,7 +39,6 @@ class AgentMetaService:
         # 1. 文件校验，上传
         if not file.filename.endswith(".zip"):
             raise errors.ZipError(msg="智能体文件必须为 zip 格式")
-        filename = file.filename.split(".")[0]
 
         contents = await file.read()
         try:

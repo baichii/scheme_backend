@@ -4,7 +4,7 @@ from fastapi import APIRouter, File, UploadFile
 
 from backend.app.agent.schema.agent_meta import CreateAgentParam, GetAgentMetaDetail
 from backend.app.agent.service.agent_meta_service import agent_meta_service
-from backend.common.response.response_schema import ResponseModel, response_base, ResponseSchemaModel
+from backend.common.response.response_schema import ResponseModel, ResponseSchemaModel, response_base
 from backend.database.db import CurrentSession, CurrentSessionTransaction
 
 router = APIRouter()
@@ -32,7 +32,7 @@ async def get_agent_meta_by_id(
 async def create_agent_meta(
     db: CurrentSessionTransaction,
     obj: CreateAgentParam,
-    file: UploadFile = File(...)
+    file: UploadFile = File(default=...)
 ) -> ResponseModel:
     """创建智能体元数据"""
     await agent_meta_service.create(db=db, obj=obj, file=file)
