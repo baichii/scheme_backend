@@ -40,6 +40,8 @@ class CRUDEnvInstance(CRUDPlus[EnvInstance]):
     async def delete(self, db: AsyncSession, pk: int) -> int:
         """删除环境配置实例"""
         env_instance = await self.get(db, pk)
+        if not env_instance:
+            return 0
         await db.delete(env_instance)
         return 1
 

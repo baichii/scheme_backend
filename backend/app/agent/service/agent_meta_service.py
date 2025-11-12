@@ -43,7 +43,7 @@ class AgentMetaService:
         contents = await file.read()
         try:
             with zipfile.ZipFile(BytesIO(contents)) as zf:
-                if not zf.testzip():
+                if zf.testzip():
                     raise errors.ZipError(msg="智能体文件压缩包损坏")
         except zipfile.BadZipFile:
             raise errors.ZipError(msg="智能体文件压缩包损坏")
@@ -52,8 +52,8 @@ class AgentMetaService:
         unique_id = snowflake.generate()
         file_load_name = f"{unique_id}_{obj.load}.zip"
         url = minio_uploader.upload_file(
-            file_content=contents,
-            file_name=file_load_name,
+            file_data=contents,
+            object_name=file_load_name,
             content_type="application/zip",
         )
         # 2. 结果写入数据库

@@ -23,7 +23,7 @@ async def get_scheme_by_id(db: CurrentSession, pk: int) -> ResponseSchemaModel[G
     return response_base.success(data=scheme)
 
 
-@router.get("/{name}", summary="根据名称获取方案配置详情")
+@router.get("/by-name/{name}", summary="根据名称获取方案配置详情")
 async def get_scheme_by_name(db: CurrentSession, name: str) -> ResponseSchemaModel[GetSchemeDetail]:
     """根据名称获取方案配置详情"""
     scheme = await scheme_service.get_by_name(db=db, name=name)

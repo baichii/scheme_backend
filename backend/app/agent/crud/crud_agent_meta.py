@@ -25,6 +25,8 @@ class CRUDAgentMeta(CRUDPlus[AgentMeta]):
     async def delete(self, db: AsyncSession, pk: int) -> int:
         """根据智能体ID删除智能体元数据"""
         agent = await self.get(db, pk)
+        if not agent:
+            return 0
         await db.delete(agent)
         return 1
 

@@ -29,6 +29,8 @@ class CRUDScheme(CRUDPlus[Scheme]):
     async def delete(self, db: AsyncSession, pk: int) -> int:
         """删除方案配置"""
         scheme = await self.get(db, pk)
+        if not scheme:
+            return 0
         await db.delete(scheme)
         return 1
 

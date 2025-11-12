@@ -22,7 +22,7 @@ async def get_env_template_by_id(db: CurrentSession, pk: int) -> ResponseSchemaM
     return response_base.success(data=env_template)
 
 
-@router.get("/{name}", summary="根据名称获取环境配置模版")
+@router.get("/by-name/{name}", summary="根据名称获取环境配置模版")
 async def get_env_template_by_name(db: CurrentSession, name: str) -> ResponseSchemaModel[GetEnvTemplateDetail]:
     """根据名称获取环境配置模版"""
     env_template = await env_template_service.get_by_name(db=db, name=name)

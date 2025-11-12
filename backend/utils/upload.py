@@ -94,7 +94,7 @@ class MinIOUploader:
         Returns:
             str: 文件的访问 URL
         """
-        return f"http://{settings.AGENT_MINIO_HOST}:{settings.AGENT_MINIO_PORT}/{self.bucket_name}/{object_name}"
+        return f"http://{settings.MINIO_ENDPOINT}/{self.bucket_name}/{object_name}"
 
 
 # 单例模式
