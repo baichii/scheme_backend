@@ -56,7 +56,7 @@ class EnvInstanceService:
         await env_instance_dao.update(db, obj)
 
     @staticmethod
-    async def delete(*, db: AsyncSession, pk: int) -> None:
+    async def delete(*, db: AsyncSession, pk: int) -> int:
         """删除环境配置实例"""
         env_instance = await env_instance_dao.get(db, pk)
         if not env_instance:
