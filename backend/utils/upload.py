@@ -64,7 +64,7 @@ class MinIOUploader:
             )
 
             # 返回文件路径
-            return f"{self.bucket_name}/{object_name}"
+            return f"{settings.MINIO_ENDPOINT}/{self.bucket_name}/{object_name}"
 
         except S3Error as e:
             raise Exception(f"文件上传失败: {str(e)}")

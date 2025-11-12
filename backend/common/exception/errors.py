@@ -11,7 +11,7 @@ class BaseExceptionError(Exception):
 
     code: int
 
-    def __init__(self, *, msg: str = None, data: Any = None, background: BackgroundTask | None = None):
+    def __init__(self, *, msg: str = None, data: Any = None, background: BackgroundTask | None = None) -> None:
         self.msg = msg
         self.data = data
         self.background = background
@@ -20,8 +20,22 @@ class BaseExceptionError(Exception):
 class HTTPError(HTTPException):
     """http 异常"""
 
-    def __init__(self, code: int, msg: Any = None, headers: dict[str, Any] | None = None):
+    def __init__(self, code: int, msg: Any = None, headers: dict[str, Any] | None = None) -> None:
         super().__init__(status_code=code, detail=msg, headers=headers)
+
+
+class CustomError(BaseExceptionError):
+    """自定义异常"""
+    def __init__(self, *, code: int, msg: str = None, data: Any = None, background: BackgroundTask | None = None) -> None:
+        self.code = code
+        super().__init__(msg=msg, data=data, background=background)
+
+
+class ZipError(BaseExceptionError):
+    """压缩包异常"""
+    def __init__(self, *, code: int = StandardResponseCode.HTTP_400, msg: str = "压缩包异常", data: Any = None, background: BackgroundTask | None = None) -> None:
+        self.code = code
+        super().__init__(msg=msg, data=data, background=background)
 
 
 class RequestError(BaseExceptionError):
@@ -34,7 +48,7 @@ class RequestError(BaseExceptionError):
         msg: str = "Bad Request",
         data: Any = None,
         background: BackgroundTask | None = None,
-    ):
+    ) -> None:
         self.code = code
         super().__init__(msg=msg, data=data, background=background)
 
@@ -46,7 +60,7 @@ class ForbiddenError(BaseExceptionError):
 
     def __init__(
         self, *, msg: str = "Forbidden", data: Any = None, background: BackgroundTask | None = None
-    ):
+    ) -> None:
         super().__init__(msg=msg, data=data, background=background)
 
 
