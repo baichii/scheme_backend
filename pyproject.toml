@@ -29,7 +29,7 @@ lint.select = [
     "I",   # isort
     "B",   # flake8-bugbear
 ]
-lint.ignore = []
+lint.ignore = ["E501", "B904", "B008"]
 exclude = [
     ".venv",
     "migrations",

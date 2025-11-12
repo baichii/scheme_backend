@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.scheme.crud.scheme import scheme_dao
 from backend.app.scheme.model.scheme import Scheme
-from backend.app.scheme.schema.scheme import CreateSchemeParam, CreateSchemeInternal
+from backend.app.scheme.schema.scheme import CreateSchemeInternal, CreateSchemeParam
 from backend.common.exception import errors
 
 
@@ -16,7 +16,7 @@ class SchemeService:
         """获取方案配置"""
         scheme = await scheme_dao.get(db, pk)
         if not scheme:
-            raise errors.NotFoundError(msg=f"方案配置不存在")
+            raise errors.NotFoundError(msg="方案配置不存在")
         return scheme
 
     @staticmethod
@@ -29,7 +29,7 @@ class SchemeService:
         """根据名称获取方案配置"""
         scheme = await scheme_dao.get_by_name(db, name)
         if not scheme:
-            raise errors.NotFoundError(msg=f"方案配置不存在")
+            raise errors.NotFoundError(msg="方案配置不存在")
         return scheme
 
     @staticmethod
@@ -45,7 +45,7 @@ class SchemeService:
         """删除方案配置"""
         scheme = await scheme_dao.delete(db, pk)
         if not scheme:
-            raise errors.NotFoundError(msg=f"方案配置不存在")
+            raise errors.NotFoundError(msg="方案配置不存在")
         return 1
 
 

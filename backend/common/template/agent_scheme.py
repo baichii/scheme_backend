@@ -1,6 +1,5 @@
-from typing import Optional, List, Dict, Any
 
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, ConfigDict
 
 
 class EnvConfig(BaseModel):
