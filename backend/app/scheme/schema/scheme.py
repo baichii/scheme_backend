@@ -11,7 +11,7 @@ class SchemeParamBase(SchemaBase):
     name: str = Field(description="方案实例名称")
     description: str = Field(description="方案实例描述")
     side: str = Field(description="方案所属阵营")
-    agent_schemes: list[dict] = Field(description="智能体方案配置")
+    deduce_config: list[dict] = Field(description="智能体方案配置")
 
 
 class CreateSchemeParam(SchemeParamBase):
