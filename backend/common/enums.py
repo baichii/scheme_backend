@@ -26,3 +26,12 @@ class IntEnum(_EnumBase, SourceIntEnum):
 
 class StrEnum(_EnumBase, Enum):
     """字符串枚举基类"""
+
+
+class DeductionPlanStatus(IntEnum):
+    """扣分方案状态枚举"""
+
+    INACTIVE = 0  # 未激活
+    RUNNING = 1  # 激活
+    FINISHED = 2
+    ERROR = 3

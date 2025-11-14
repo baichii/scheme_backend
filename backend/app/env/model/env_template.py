@@ -5,7 +5,7 @@ from backend.common.model import Base, id_key
 
 
 class EnvTemplate(Base):
-    """环境配置模版"""
+    """环境配置模型"""
 
     __tablename__ = "env_template"
 
