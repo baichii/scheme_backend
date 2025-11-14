@@ -892,8 +892,6 @@ class DependencyScheduler:
 2. 优化执行调度
 3. 完善日志和错误处理
 
----
-
 **文档版本**: v2.0
 **创建时间**: 2025-11-13
 **作者**: Claude Assistant
