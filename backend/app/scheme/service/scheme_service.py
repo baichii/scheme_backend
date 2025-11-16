@@ -22,7 +22,8 @@ class SchemeService:
     @staticmethod
     async def get_all(*, db: AsyncSession) -> Sequence[Scheme]:
         """获取所有方案配置"""
-        return await scheme_dao.get_all(db)
+        schemes = await scheme_dao.get_all(db)
+        return schemes
 
     @staticmethod
     async def get_by_name(*, db: AsyncSession, name: str) -> Scheme | None:

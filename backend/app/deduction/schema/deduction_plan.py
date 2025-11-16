@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import ConfigDict, Field
 
 from backend.common.schema import SchemaBase
-from backend.common.enums import DeductionStatus
+from backend.common.enums import DeductionPlanStatus
 
 
 class DeductionPlanParamBase(SchemaBase):
@@ -11,7 +11,7 @@ class DeductionPlanParamBase(SchemaBase):
 
     name: str = Field(description="推演方案名称")
     description: str | None = Field(None, description="推演方案描述")
-    plan_config: dict = Field(description="推演方案配置")
+    task_config: dict = Field(description="推演方案配置")
     start_time: datetime | None = Field(None, description="推演开始时间")
 
 
@@ -21,8 +21,8 @@ class CreateDeductionPlanParam(DeductionPlanParamBase):
 
 class CreateDeductionPlanInternal(DeductionPlanParamBase):
     """创建推演方案配置参数(上传数据库)"""
-    plan_id: int = Field(description="推演方案ID")
-    status: DeductionStatus = Field(description="推演方案状态")
+    id: int = Field(description="推演方案ID")
+    status: DeductionPlanStatus = Field(description="推演方案状态")
 
 
 

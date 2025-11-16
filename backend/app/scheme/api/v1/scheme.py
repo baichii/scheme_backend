@@ -12,7 +12,6 @@ router = APIRouter()
 async def get_all_schemes(db: CurrentSession) -> ResponseSchemaModel[list[GetSchemeDetail]]:
     """获取所有方案配置"""
     schemes = await scheme_service.get_all(db=db)
-
     return response_base.success(data=schemes)
 
 

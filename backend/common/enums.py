@@ -28,7 +28,7 @@ class StrEnum(_EnumBase, Enum):
     """字符串枚举基类"""
 
 
-class DeductionStatus(StrEnum):
+class DeductionPlanStatus(StrEnum):
     """推演方案状态枚举"""
 
     INACTIVE = "inactive"
