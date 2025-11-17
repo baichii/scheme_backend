@@ -67,12 +67,12 @@ class EnvInstanceService:
     @staticmethod
     async def delete_all(*, db: AsyncSession) -> int:
         """删除所有环境配置实例"""
-        env_instances = await env_instance_dao.get_all(db)
-        count = 0
-        for env_instance in env_instances:
-            await env_instance_dao.delete(db, env_instance.id)
-            count += 1
-        return count
+        from sqlalchemy import delete
+        from backend.app.env.model.env_instance import EnvInstance
+
+        stmt = delete(EnvInstance)
+        result = await db.execute(stmt)
+        return result.rowcount
 
 
 env_instance_service: EnvInstanceService = EnvInstanceService()

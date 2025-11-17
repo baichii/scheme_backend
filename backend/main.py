@@ -8,9 +8,6 @@ app = register_app()
 
 
 if __name__ == "__main__":
-    try:
-        config = uvicorn.Config(app=f"{Path(__file__).stem}:app", reload=True)
-        server = uvicorn.Server(config)
-        server.run()
-    except Exception as e:
-        raise e
+    config = uvicorn.Config(app=f"{Path(__file__).stem}:app", reload=True)
+    server = uvicorn.Server(config)
+    server.run()

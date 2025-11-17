@@ -5,7 +5,7 @@ from backend.core.conf import settings
 
 
 class Timezone:
-    def __init__(self, tz: str = settings.DATATIME_TIMEZONE) -> None:
+    def __init__(self, tz: str = settings.DATETIME_TIMEZONE) -> None:
         """
         初始化时区
 
@@ -29,7 +29,7 @@ class Timezone:
         """
         return dt.astimezone(self.tz_info)
 
-    def f_str(self, date_str: str, format_str: str = settings.DATATIME_FORMAT) -> datetime:
+    def f_str(self, date_str: str, format_str: str = settings.DATETIME_FORMAT) -> datetime:
         """
         将字符串时间转换为指定时区时间格式
         Args:
@@ -44,7 +44,7 @@ class Timezone:
         return dt
 
     @staticmethod
-    def t_str(dt: datetime, format_str: str = settings.DATATIME_FORMAT) -> str:
+    def t_str(dt: datetime, format_str: str = settings.DATETIME_FORMAT) -> str:
         """
         将datetime时间转换为字符串时间格式
         Args:

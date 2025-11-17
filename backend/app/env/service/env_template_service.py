@@ -28,9 +28,10 @@ class EnvTemplateService:
     @staticmethod
     async def get_by_name(*, db: AsyncSession, name: str) -> EnvTemplate | None:
         """根据名称获取环境配置模版"""
-        if await env_template_dao.get_by_name(db, name):
-            return await env_template_dao.get_by_name(db, name)
-        raise errors.NotFoundError(msg="环境配置模版不存在")
+        env_template = await env_template_dao.get_by_name(db, name)
+        if not env_template:
+            raise errors.NotFoundError(msg="环境配置模版不存在")
+        return env_template
 
     @staticmethod
     async def create(*, db: AsyncSession, obj: CreateEnvTemplateParam) -> None:
@@ -51,15 +52,13 @@ class EnvTemplateService:
 
     @staticmethod
     async def delete_all(*, db: AsyncSession) -> int:
-        """删除所有环境配置模版
-        fixme: 优化一下，避免遍历删除
-        """
-        env_templates = await env_template_dao.get_all(db)
-        count = 0
-        for env_template in env_templates:
-            await env_template_dao.delete(db, env_template.id)
-            count += 1
-        return count
+        """删除所有环境配置模版"""
+        from sqlalchemy import delete
+        from backend.app.env.model.env_template import EnvTemplate
+
+        stmt = delete(EnvTemplate)
+        result = await db.execute(stmt)
+        return result.rowcount
 
 
 env_template_service: EnvTemplateService = EnvTemplateService()

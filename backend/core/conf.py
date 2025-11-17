@@ -29,9 +29,9 @@ class Settings(BaseSettings):
     FASTAPI_OPENAPI_URL: str | None = "/openapi"
     FASTAPI_STATIC_FILES: bool = False
 
-    # datatime
-    DATATIME_TIMEZONE: str = "Asia/Shanghai"
-    DATATIME_FORMAT: str = "%Y-%m-%d %H:%M:%S"
+    # datetime
+    DATETIME_TIMEZONE: str = "Asia/Shanghai"
+    DATETIME_FORMAT: str = "%Y-%m-%d %H:%M:%S"
 
     # fastapi
 
