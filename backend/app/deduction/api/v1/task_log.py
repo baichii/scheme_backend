@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from backend.app.deduction.schema.task_log import GetTaskLogDetail
-from backend.app.deduction.service import task_log_service
+from backend.app.deduction.service.task_log_service import task_log_service
 from backend.common.response.response_schema import ResponseModel, ResponseSchemaModel, response_base
 from backend.database.db import CurrentSession, CurrentSessionTransaction
 
