@@ -37,7 +37,7 @@ class AgentMetaService:
         2. 结果写入数据库
         """
         # 1. 文件校验，上传
-        if not file.filename.endswith(".zip"):
+        if not file.filename or not file.filename.endswith(".zip"):
             raise errors.ZipError(msg="智能体文件必须为 zip 格式")
 
         contents = await file.read()
@@ -59,7 +59,7 @@ class AgentMetaService:
         # 2. 结果写入数据库
         agent = CreateAgentInternal(
             name=obj.name,
-            load=file_load_name.split(".")[0],
+            load=file_load_name.rsplit(".", 1)[0],
             side=obj.side,
             param_schema=obj.param_schema,
             description=obj.description,
@@ -71,7 +71,25 @@ class AgentMetaService:
     @staticmethod
     async def delete(*, db: AsyncSession, pks: list[int]) -> int:
         """删除智能体"""
+        # 获取删除智能体列表
+        delete_agent_metas = []
+        for pk in pks:
+            agent_meta = await agent_meta_dao.get(db, pk)
+            if agent_meta:
+                delete_agent_metas.append(agent_meta)
+
+        # 删除数据库记录
         count = await agent_meta_dao.delete(db, pks)
+
+        # 删除minio文件
+        if count > 0:
+            for agent_meta in delete_agent_metas:
+                try:
+                    object_name = agent_meta.url.split("/")[-1]
+                    minio_uploader.delete_file(object_name=object_name)
+                except Exception as e:
+                    print(f"删除minio文件{agent_meta}失败: {e}")
+
         return count
 
 

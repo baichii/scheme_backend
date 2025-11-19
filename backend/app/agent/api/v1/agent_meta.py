@@ -32,8 +32,8 @@ async def get_agent_meta_by_id(
 async def create_agent_meta(
     db: CurrentSessionTransaction,
     obj: CreateAgentParam,
-    file: UploadFile = File(default=...)
-) -> ResponseModel:
+    file: UploadFile = File(...)
+) -> ResponseSchemaModel[int]:
     """创建智能体元数据"""
     agent_meta = await agent_meta_service.create(db=db, obj=obj, file=file)
     return response_base.success(data=agent_meta.id)
