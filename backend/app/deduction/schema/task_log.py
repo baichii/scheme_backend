@@ -1,9 +1,8 @@
 from datetime import datetime
 
-from pydantic import ConfigDict, Field
+from pydantic import Field, ConfigDict
 
 from backend.common.schema import SchemaBase
-from backend.common.model import snowflake_id_key
 from backend.common.enums import TaskLogType, TaskLogLevel
 
 
@@ -21,8 +20,15 @@ class CreateTaskLogParam(TaskLogParamBase):
     """创建推演任务日志配置参数(api传入参数)"""
 
 
+class DeleteTaskLogParam(SchemaBase):
+    """删除推演任务日志参数"""
+    pks: list[int] = Field(description="日志记录ID列表")
+
+
 class GetTaskLogDetail(TaskLogParamBase):
     """获取推演日志"""
+    model_config = ConfigDict(from_attributes=True)
+
     id: int = Field(description="日志记录ID")
     create_at: datetime = Field(description="创建时间")
 

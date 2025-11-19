@@ -3,13 +3,13 @@ from __future__ import annotations
 import sqlalchemy as sa
 from sqlalchemy.orm import Mapped, mapped_column
 
-from backend.common.model import Base
+from backend.common.model import Base, id_key
 
 
 class AgentMeta(Base):
     __tablename__ = "agent_meta"
 
-    id: Mapped[int] = mapped_column(sa.Integer, sa.Identity(start=10000, increment=1), primary_key=True, comment="智能体id")
+    id: Mapped[id_key] = mapped_column(init=False, comment="智能体ID")
     name: Mapped[str] = mapped_column(sa.String(64), unique=True, comment="智能体名称")
     load: Mapped[str] = mapped_column(sa.String(128), unique=True, comment="智能体文件加载名称")
     side: Mapped[str | None] = mapped_column(sa.String(64), nullable=True, comment="智能体默认阵营")

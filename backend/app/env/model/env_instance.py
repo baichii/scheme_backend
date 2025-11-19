@@ -9,7 +9,7 @@ class EnvInstance(Base):
 
     __tablename__ = "env_instance"
 
-    id: Mapped[id_key] = mapped_column(init=False)
+    id: Mapped[id_key] = mapped_column(init=False, comment="环境配置实例ID")
     name: Mapped[str] = mapped_column(sa.String(64), unique=True, comment="环境配置实例名称")
     template_id: Mapped[int] = mapped_column(
         sa.ForeignKey("env_template.id", ondelete="CASCADE"),

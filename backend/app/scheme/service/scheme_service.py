@@ -35,29 +35,29 @@ class SchemeService:
         return scheme
 
     @staticmethod
-    async def create(*, db: AsyncSession, obj: CreateSchemeParam) -> None:
+    async def create(*, db: AsyncSession, obj: CreateSchemeParam) -> Scheme:
         """创建方案配置"""
 
-        unique_id = snowflake.generate_id()
+        unique_id = snowflake.generate()
         obj = CreateSchemeInternal(id=unique_id, **obj.model_dump())
-        await scheme_dao.create(db, obj)
+        return await scheme_dao.create(db, obj)
 
     @staticmethod
-    async def update(*, db: AsyncSession, pk: int, obj: UpdateSchemeParam) -> int:
+    async def update(*, db: AsyncSession, pk: int, obj: UpdateSchemeParam) -> Scheme:
         """更新方案配置"""
-        scheme = await scheme_dao.get(db, pk)
-        if not scheme:
+        existing = await scheme_dao.get(db, pk)
+        if not existing:
             raise errors.NotFoundError(msg="方案配置不存在")
+
         await scheme_dao.update(db, pk, obj)
-        return 1
+        
+        return await scheme_dao.get(db, pk)
+
 
     @staticmethod
     async def delete(*, db: AsyncSession, pk: int) -> int:
         """删除方案配置"""
-        scheme = await scheme_dao.delete(db, pk)
-        if not scheme:
-            raise errors.NotFoundError(msg="方案配置不存在")
-        return 1
+        return await scheme_dao.delete(db, pk)
 
 
 scheme_service: SchemeService = SchemeService()

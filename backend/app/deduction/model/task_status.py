@@ -10,7 +10,7 @@ class TaskStatus(Base):
 
     __tablename__ = "task_status"
 
-    id: Mapped[snowflake_id_key] = mapped_column(sa.Integer, comment="任务运行ID")
+    id: Mapped[snowflake_id_key] = mapped_column(comment="任务运行ID")
 
     suffix: Mapped[int] = mapped_column(sa.Integer, comment="合成ID后缀")
     deduce_id: Mapped[int] = mapped_column(sa.Integer, comment="推演ID")

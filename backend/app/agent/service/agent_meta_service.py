@@ -7,10 +7,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.agent.crud.crud_agent_meta import agent_meta_dao
 from backend.app.agent.model.agent_meta import AgentMeta
-from backend.app.agent.schema.agent_meta import CreateAgentInternal, CreateAgentParam
+from backend.app.agent.schema.agent_meta import CreateAgentInternal, CreateAgentParam, DeleteAgentParam
 from backend.common.exception import errors
 from backend.utils.snowflake import snowflake
 from backend.utils.upload import minio_uploader
+from backend.common.log import log
 
 
 class AgentMetaService:
@@ -41,6 +42,7 @@ class AgentMetaService:
             raise errors.ZipError(msg="智能体文件必须为 zip 格式")
 
         contents = await file.read()
+        filename = file.filename.rsplit(".", 1)[0]
         try:
             with zipfile.ZipFile(BytesIO(contents)) as zf:
                 if zf.testzip():
@@ -50,7 +52,7 @@ class AgentMetaService:
 
         # 上传文件到 minio
         unique_id = snowflake.generate()
-        file_load_name = f"{unique_id}_{obj.load}.zip"
+        file_load_name = f"{unique_id}_{filename}.zip"
         url = minio_uploader.upload_file(
             file_data=contents,
             object_name=file_load_name,
@@ -58,8 +60,9 @@ class AgentMetaService:
         )
         # 2. 结果写入数据库
         agent = CreateAgentInternal(
+            id=unique_id,
             name=obj.name,
-            load=file_load_name.rsplit(".", 1)[0],
+            load=filename,
             side=obj.side,
             param_schema=obj.param_schema,
             description=obj.description,
@@ -69,17 +72,17 @@ class AgentMetaService:
         return await agent_meta_dao.create(db, agent)
 
     @staticmethod
-    async def delete(*, db: AsyncSession, pks: list[int]) -> int:
+    async def delete(*, db: AsyncSession, obj: DeleteAgentParam) -> int:
         """删除智能体"""
         # 获取删除智能体列表
         delete_agent_metas = []
-        for pk in pks:
+        for pk in obj.pks:
             agent_meta = await agent_meta_dao.get(db, pk)
             if agent_meta:
                 delete_agent_metas.append(agent_meta)
 
         # 删除数据库记录
-        count = await agent_meta_dao.delete(db, pks)
+        count = await agent_meta_dao.delete(db, obj.pks)
 
         # 删除minio文件
         if count > 0:
@@ -88,7 +91,7 @@ class AgentMetaService:
                     object_name = agent_meta.url.split("/")[-1]
                     minio_uploader.delete_file(object_name=object_name)
                 except Exception as e:
-                    print(f"删除minio文件{agent_meta}失败: {e}")
+                    log.info(f"删除minio文件{agent_meta}失败: {e}")
 
         return count
 

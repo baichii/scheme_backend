@@ -27,6 +27,10 @@ class UpdateSchemeParam(SchemeParamBase):
     """更新方案参数"""
 
 
+class DeleteSchemeParam(SchemaBase):
+    pks: list[int] = Field(description="方案ID列表")
+
+
 class GetSchemeDetail(SchemeParamBase):
     """方案详情"""
 

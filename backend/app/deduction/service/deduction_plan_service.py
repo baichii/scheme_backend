@@ -1,11 +1,10 @@
 from collections.abc import Sequence
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from watchfiles import awatch
 
 from backend.app.deduction.crud.deduction_plan import deduction_plan_dao
 from backend.app.deduction.model.deduction_plan import DeductionPlan
-from backend.app.deduction.schema.deduction_plan import CreateDeductionPlanParam, CreateDeductionPlanInternal, UpdateDeductionPlanParam
+from backend.app.deduction.schema.deduction_plan import CreateDeductionPlanParam, CreateDeductionPlanInternal, UpdateDeductionPlanParam, ExecuteDeductionPlanParam
 from backend.common.exception import errors
 from backend.utils.snowflake import snowflake
 from backend.common.enums import DeductionPlanStatus
@@ -43,25 +42,35 @@ class DeductionPlanService:
         return await deduction_plan_dao.get(db, unique_id)
 
     @staticmethod
-    async def update(*, db: AsyncSession, obj: UpdateDeductionPlanParam) -> DeductionPlan:
+    async def update(*, db: AsyncSession, pk: int, obj: UpdateDeductionPlanParam) -> DeductionPlan:
         """更新推理方案"""
         # 检查是否存在
-        existing = await deduction_plan_dao.get(db, obj.id)
+        existing = await deduction_plan_dao.get(db, pk)
         if not existing:
             raise errors.NotFoundError(msg="推理方案不存在")
 
-        # 只更新提供的字段
-        update_data = obj.model_dump(exclude_unset=True, exclude={'id'})
-        if update_data:
-            await deduction_plan_dao.update(db, obj.id, update_data)
+        await deduction_plan_dao.update(db, pk, obj)
 
         # 返回更新后的对象
-        return await deduction_plan_dao.get(db, obj.id)
+        return await deduction_plan_dao.get(db, pk)
 
     @staticmethod
-    async def delete(*, db: AsyncSession, pks: list[int]) -> int:
+    async def execute(*, db: AsyncSession, pk: int, obj: ExecuteDeductionPlanParam) -> DeductionPlan:
+        """执行推理方案"""
+        existing = await deduction_plan_dao.get(db, pk)
+        if not existing:
+            raise errors.NotFoundError(msg="推理方案不存在")
+
+        await deduction_plan_dao.execute(db, pk, obj)
+
+        # todo: 评估如何实现推理方案的执行逻辑
+        return await deduction_plan_dao.get(db, pk)
+
+
+    @staticmethod
+    async def delete(*, db: AsyncSession, obj) -> int:
         """批量删除任务结果"""
-        return await deduction_plan_dao.delete(db, pks)
+        return await deduction_plan_dao.delete(db, obj)
 
 
 deduction_plan_service: DeductionPlanService = DeductionPlanService()

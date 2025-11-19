@@ -4,7 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy_crud_plus import CRUDPlus
 
 from backend.app.scheme.model.scheme import Scheme
-from backend.app.scheme.schema.scheme import CreateSchemeInternal
+from backend.app.scheme.schema.scheme import CreateSchemeInternal, UpdateSchemeParam
+from backend.common.exception import errors
 
 
 class CRUDScheme(CRUDPlus[Scheme]):
@@ -27,14 +28,12 @@ class CRUDScheme(CRUDPlus[Scheme]):
         scheme = await self.create_model(db, obj, flush=True)
         return scheme
 
-    async def update(self, db: AsyncSession, pk: int, obj: UpdateSchemeParam) -> None:
+    async def update(self, db: AsyncSession, pk: int, obj: UpdateSchemeParam) -> int:
         """更新方案配置"""
         scheme = await self.get(db, pk)
         if not scheme:
             raise errors.NotFoundError(msg="方案配置不存在")
-        await self.update_model(db, scheme, obj)
-
-
+        return await self.update_model(db, pk, obj)
 
     async def delete(self, db: AsyncSession, pk: int) -> int:
         """删除方案配置"""

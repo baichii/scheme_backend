@@ -31,11 +31,9 @@ class TaskLogService:
         await task_log_dao.create(db, obj)
 
     @staticmethod
-    async def delete(*, db: AsyncSession, pk: int) -> int:
+    async def delete(*, db: AsyncSession, pks: list[int]) -> int:
         """删除任务日志"""
-        task_log = await task_log_dao.delete(db, pk)
-        if not task_log:
-            raise errors.NotFoundError(msg="任务日志不存在")
-        return 1
+        return await task_log_dao.delete(db, pks)
+
 
 task_log_service: TaskLogService = TaskLogService()

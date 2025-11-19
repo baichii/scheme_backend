@@ -9,6 +9,6 @@ class EnvTemplate(Base):
 
     __tablename__ = "env_template"
 
-    id: Mapped[id_key] = mapped_column(init=False)
+    id: Mapped[id_key] = mapped_column(init=False, comment="环境配置模版ID")
     name: Mapped[str] = mapped_column(sa.String(64), unique=True, comment="环境配置模版名称")
     param_schema: Mapped[dict] = mapped_column(sa.JSON, comment="环境配置模版参数 schema")

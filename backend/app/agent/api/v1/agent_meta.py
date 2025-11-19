@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, File, UploadFile
 
-from backend.app.agent.schema.agent_meta import CreateAgentParam, GetAgentMetaDetail
+from backend.app.agent.schema.agent_meta import CreateAgentParam, GetAgentMetaDetail, DeleteAgentParam
 from backend.app.agent.service.agent_meta_service import agent_meta_service
 from backend.common.response.response_schema import ResponseModel, ResponseSchemaModel, response_base
 from backend.database.db import CurrentSession, CurrentSessionTransaction
@@ -53,10 +53,10 @@ async def create_agent_meta(
 
 @router.delete("", summary="批量删除智能体元数据")
 async def delete_agent_meta(
-    db: CurrentSessionTransaction, pks: list[int]
+    db: CurrentSessionTransaction, obj: DeleteAgentParam
 ) -> ResponseModel:
     """删除智能体元数据"""
-    count = await agent_meta_service.delete(db=db, pks=pks)
+    count = await agent_meta_service.delete(db=db, obj=obj)
     if count > 0:
         return response_base.success()
     return response_base.fail()
