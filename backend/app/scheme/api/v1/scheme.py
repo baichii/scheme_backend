@@ -1,6 +1,8 @@
-from fastapi import APIRouter
+from typing import Annotated
 
-from backend.app.scheme.schema.scheme import CreateSchemeParam, GetSchemeDetail
+from fastapi import APIRouter, Path
+
+from backend.app.scheme.schema.scheme import CreateSchemeParam, GetSchemeDetail, UpdateSchemeParam
 from backend.app.scheme.service.scheme_service import scheme_service
 from backend.common.response.response_schema import ResponseModel, ResponseSchemaModel, response_base
 from backend.database.db import CurrentSession, CurrentSessionTransaction
@@ -36,8 +38,15 @@ async def create_scheme(db: CurrentSessionTransaction, param: CreateSchemeParam)
     return response_base.success()
 
 
+@router.put("/{pk}", summary="更新方案配置")
+async def update_scheme(db: CurrentSessionTransaction, pk:  Annotated[int, Path(description="方案ID")], param: UpdateSchemeParam) -> ResponseModel:
+    """更新方案配置"""
+    await scheme_service.update(db=db, pk=pk, obj=param)
+    return response_base.success()
+
+
 @router.delete("/{pk}", summary="根据ID删除方案配置")
-async def delete_scheme(db: CurrentSessionTransaction, pk: int) -> ResponseModel:
+async def delete_scheme(db: CurrentSessionTransaction, pk: Annotated[int, Path(description="方案ID")]) -> ResponseModel:
     """删除方案配置"""
     await scheme_service.delete(db=db, pk=pk)
     return response_base.success()

@@ -11,7 +11,7 @@ class SchemeParamBase(SchemaBase):
     name: str = Field(description="方案实例名称")
     description: str = Field(description="方案实例描述")
     side: str = Field(description="方案所属阵营")
-    deduce_config: list[dict] = Field(description="智能体方案配置")
+    scheme_config: dict = Field(description="智能体方案配置")
 
 
 class CreateSchemeParam(SchemeParamBase):
@@ -20,11 +20,11 @@ class CreateSchemeParam(SchemeParamBase):
 
 class CreateSchemeInternal(SchemeParamBase):
     """创建方案参数(上传数据库)"""
+    id: int = Field(description="方案ID")
 
 
-# class UpdateSchemeParam(SchemeParamBase):
-#     """更新方案参数"""
-#     config: dict = Field(description="方案配置")
+class UpdateSchemeParam(SchemeParamBase):
+    """更新方案参数"""
 
 
 class GetSchemeDetail(SchemeParamBase):

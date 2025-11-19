@@ -22,9 +22,19 @@ class CRUDScheme(CRUDPlus[Scheme]):
         """根据名称获取方案配置"""
         return await self.select_model_by_column(db, name=name)
 
-    async def create(self, db: AsyncSession, obj: CreateSchemeInternal) -> None:
+    async def create(self, db: AsyncSession, obj: CreateSchemeInternal) -> Scheme:
         """创建方案配置"""
-        await self.create_model(db, obj, flush=True)
+        scheme = await self.create_model(db, obj, flush=True)
+        return scheme
+
+    async def update(self, db: AsyncSession, pk: int, obj: UpdateSchemeParam) -> None:
+        """更新方案配置"""
+        scheme = await self.get(db, pk)
+        if not scheme:
+            raise errors.NotFoundError(msg="方案配置不存在")
+        await self.update_model(db, scheme, obj)
+
+
 
     async def delete(self, db: AsyncSession, pk: int) -> int:
         """删除方案配置"""
