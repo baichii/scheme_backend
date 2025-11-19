@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy_crud_plus import CRUDPlus
 
 from backend.app.scheme.model.scheme import Scheme
-from backend.app.scheme.schema.scheme import CreateSchemeInternal, UpdateSchemeParam
+from backend.app.scheme.schema.scheme import CreateSchemeParam, UpdateSchemeParam
 from backend.common.exception import errors
 
 
@@ -23,10 +23,9 @@ class CRUDScheme(CRUDPlus[Scheme]):
         """根据名称获取方案配置"""
         return await self.select_model_by_column(db, name=name)
 
-    async def create(self, db: AsyncSession, obj: CreateSchemeInternal) -> Scheme:
+    async def create(self, db: AsyncSession, obj: CreateSchemeParam) -> Scheme:
         """创建方案配置"""
-        scheme = await self.create_model(db, obj, flush=True)
-        return scheme
+        return await self.create_model(db, obj, flush=True)
 
     async def update(self, db: AsyncSession, pk: int, obj: UpdateSchemeParam) -> int:
         """更新方案配置"""

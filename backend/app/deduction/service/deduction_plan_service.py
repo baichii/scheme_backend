@@ -4,10 +4,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.deduction.crud.deduction_plan import deduction_plan_dao
 from backend.app.deduction.model.deduction_plan import DeductionPlan
-from backend.app.deduction.schema.deduction_plan import CreateDeductionPlanParam, CreateDeductionPlanInternal, UpdateDeductionPlanParam, ExecuteDeductionPlanParam
-from backend.common.exception import errors
-from backend.utils.snowflake import snowflake
+from backend.app.deduction.schema.deduction_plan import (
+    CreateDeductionPlanInternal,
+    CreateDeductionPlanParam,
+    ExecuteDeductionPlanParam,
+    UpdateDeductionPlanParam,
+)
 from backend.common.enums import DeductionPlanStatus
+from backend.common.exception import errors
 
 
 class DeductionPlanService:
@@ -30,16 +34,11 @@ class DeductionPlanService:
     @staticmethod
     async def create(*, db: AsyncSession, obj: CreateDeductionPlanParam) -> DeductionPlan:
         """创建推理方案"""
-
-        unique_id = snowflake.generate()
         obj_internal = CreateDeductionPlanInternal(
-            id=unique_id,
             **obj.model_dump(),
             status=DeductionPlanStatus.INACTIVE,
         )
-        await deduction_plan_dao.create(db, obj_internal)
-        # 返回创建的对象
-        return await deduction_plan_dao.get(db, unique_id)
+        return await deduction_plan_dao.create(db, obj_internal)
 
     @staticmethod
     async def update(*, db: AsyncSession, pk: int, obj: UpdateDeductionPlanParam) -> DeductionPlan:
@@ -65,7 +64,6 @@ class DeductionPlanService:
 
         # todo: 评估如何实现推理方案的执行逻辑
         return await deduction_plan_dao.get(db, pk)
-
 
     @staticmethod
     async def delete(*, db: AsyncSession, obj) -> int:

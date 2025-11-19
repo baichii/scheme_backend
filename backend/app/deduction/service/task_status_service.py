@@ -4,9 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.deduction.crud.task_status import task_status_dao
 from backend.app.deduction.model.task_status import TaskStatus
-from backend.app.deduction.schema.task_status import CreateTaskStatusParam, CreateTaskStatusInternal, UpdateTaskStatusParam
+from backend.app.deduction.schema.task_status import CreateTaskStatusParam, UpdateTaskStatusParam
 from backend.common.exception import errors
-from backend.utils.snowflake import snowflake
 
 
 class TaskStatusService:
@@ -19,6 +18,7 @@ class TaskStatusService:
         if not task_status:
             raise errors.NotFoundError(msg="任务状态不存在")
         return task_status
+
     @staticmethod
     async def get_by_deduce_id(*, db: AsyncSession, deduce_id: int) -> Sequence[TaskStatus]:
         """根据推演ID获取任务状态"""
@@ -34,8 +34,6 @@ class TaskStatusService:
     @staticmethod
     async def create(*, db: AsyncSession, obj: CreateTaskStatusParam) -> TaskStatus:
         """创建任务状态"""
-        unique_id = snowflake.generate()
-        obj = CreateTaskStatusInternal(id=unique_id, **obj.model_dump())
         return await task_status_dao.create(db, obj)
 
     @staticmethod
@@ -50,4 +48,3 @@ class TaskStatusService:
 
 
 task_status_service: TaskStatusService = TaskStatusService()
-

@@ -19,4 +19,3 @@ class AgentMeta(Base):
         sa.ARRAY(sa.Integer), comment="支持的环境模板列表"
     )
     url: Mapped[str] = mapped_column(sa.String(128), comment="智能体下载路径")
-

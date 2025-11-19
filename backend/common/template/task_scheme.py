@@ -1,4 +1,3 @@
-
 from pydantic import BaseModel, ConfigDict
 
 
@@ -14,10 +13,7 @@ class AgentConfig(BaseModel):
     taskId: str
     taskName: str
 
-    model_config = ConfigDict(
-        from_attributes=True,
-        extra="allow"
-    )
+    model_config = ConfigDict(from_attributes=True, extra="allow")
 
 
 class TaskSchemeTemplate(BaseModel):
@@ -64,34 +60,34 @@ def test_container_task_scheme():
 
 def test_agent_task_scheme():
     test_data = {
-            "isRoot": True,
-            "isBox": False,
-            "id": "185217836976229888&10861",
-            "agentLoad": "agent_lt_1",
-            "envConfig": {"envType": "lt"},
-            "agentUrl": "192.168.1.1:4500/scheme/agent_lt_1.zip",
-            "agentConfig": {
-                "ip": "192.168.1.1",
-                "port": 10001,
-                "side": "red",
-                "deduceId": "1852178361053983008",
-                "taskId": "185217836976229888&10861",
-                "taskName": "本地测试智能体1",
-                "unit_ids": [],
-                "target_ids": []
-            },
-            "bizValue": {
-                "dispatchQueue": {"name": "info", "durable": True},
-                "simTimeQueue": {"name": "optSimQueue", "durable": True},
-            },
-            "pin": {"activation": None, "end": None, "delay": None, "cancel": None},
-            "agentRequire": {},
-            "father": None
-        }
+        "isRoot": True,
+        "isBox": False,
+        "id": "185217836976229888&10861",
+        "agentLoad": "agent_lt_1",
+        "envConfig": {"envType": "lt"},
+        "agentUrl": "192.168.1.1:4500/scheme/agent_lt_1.zip",
+        "agentConfig": {
+            "ip": "192.168.1.1",
+            "port": 10001,
+            "side": "red",
+            "deduceId": "1852178361053983008",
+            "taskId": "185217836976229888&10861",
+            "taskName": "本地测试智能体1",
+            "unit_ids": [],
+            "target_ids": [],
+        },
+        "bizValue": {
+            "dispatchQueue": {"name": "info", "durable": True},
+            "simTimeQueue": {"name": "optSimQueue", "durable": True},
+        },
+        "pin": {"activation": None, "end": None, "delay": None, "cancel": None},
+        "agentRequire": {},
+        "father": None,
+    }
     agent_task_scheme = AgentTaskSchemeTemplate(**test_data)
     assert agent_task_scheme.model_dump() == test_data
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test_container_task_scheme()
     test_agent_task_scheme()

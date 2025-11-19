@@ -9,13 +9,12 @@ from backend.app.agent.crud.crud_agent_meta import agent_meta_dao
 from backend.app.agent.model.agent_meta import AgentMeta
 from backend.app.agent.schema.agent_meta import CreateAgentInternal, CreateAgentParam, DeleteAgentParam
 from backend.common.exception import errors
+from backend.common.log import log
 from backend.utils.snowflake import snowflake
 from backend.utils.upload import minio_uploader
-from backend.common.log import log
 
 
 class AgentMetaService:
-
     @staticmethod
     async def get(*, db: AsyncSession, pk: int) -> AgentMeta:
         """获取智能体"""

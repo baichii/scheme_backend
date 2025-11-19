@@ -1,8 +1,8 @@
 import sqlalchemy as sa
 from sqlalchemy.orm import Mapped, mapped_column
 
-from backend.common.model import Base, snowflake_id_key
 from backend.common.enums import TaskStatus as DeductionTaskStatus
+from backend.common.model import Base, snowflake_id_key
 
 
 class TaskStatus(Base):

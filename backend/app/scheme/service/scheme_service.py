@@ -4,9 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.scheme.crud.scheme import scheme_dao
 from backend.app.scheme.model.scheme import Scheme
-from backend.app.scheme.schema.scheme import CreateSchemeInternal, CreateSchemeParam, UpdateSchemeParam
+from backend.app.scheme.schema.scheme import CreateSchemeParam, UpdateSchemeParam
 from backend.common.exception import errors
-from backend.utils.snowflake import snowflake
 
 
 class SchemeService:
@@ -37,9 +36,6 @@ class SchemeService:
     @staticmethod
     async def create(*, db: AsyncSession, obj: CreateSchemeParam) -> Scheme:
         """创建方案配置"""
-
-        unique_id = snowflake.generate()
-        obj = CreateSchemeInternal(id=unique_id, **obj.model_dump())
         return await scheme_dao.create(db, obj)
 
     @staticmethod
@@ -50,9 +46,8 @@ class SchemeService:
             raise errors.NotFoundError(msg="方案配置不存在")
 
         await scheme_dao.update(db, pk, obj)
-        
-        return await scheme_dao.get(db, pk)
 
+        return await scheme_dao.get(db, pk)
 
     @staticmethod
     async def delete(*, db: AsyncSession, pk: int) -> int:

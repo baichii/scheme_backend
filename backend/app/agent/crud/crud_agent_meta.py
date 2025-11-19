@@ -28,4 +28,3 @@ class CRUDAgentMeta(CRUDPlus[AgentMeta]):
 
 
 agent_meta_dao: CRUDAgentMeta = CRUDAgentMeta(AgentMeta)
-

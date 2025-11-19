@@ -11,7 +11,9 @@ class BaseExceptionError(Exception):
 
     code: int
 
-    def __init__(self, *, msg: str = None, data: Any = None, background: BackgroundTask | None = None) -> None:
+    def __init__(
+        self, *, msg: str = None, data: Any = None, background: BackgroundTask | None = None
+    ) -> None:
         self.msg = msg
         self.data = data
         self.background = background
@@ -26,14 +28,25 @@ class HTTPError(HTTPException):
 
 class CustomError(BaseExceptionError):
     """自定义异常"""
-    def __init__(self, *, code: int, msg: str = None, data: Any = None, background: BackgroundTask | None = None) -> None:
+
+    def __init__(
+        self, *, code: int, msg: str = None, data: Any = None, background: BackgroundTask | None = None
+    ) -> None:
         self.code = code
         super().__init__(msg=msg, data=data, background=background)
 
 
 class ZipError(BaseExceptionError):
     """压缩包异常"""
-    def __init__(self, *, code: int = StandardResponseCode.HTTP_400, msg: str = "压缩包异常", data: Any = None, background: BackgroundTask | None = None) -> None:
+
+    def __init__(
+        self,
+        *,
+        code: int = StandardResponseCode.HTTP_400,
+        msg: str = "压缩包异常",
+        data: Any = None,
+        background: BackgroundTask | None = None,
+    ) -> None:
         self.code = code
         super().__init__(msg=msg, data=data, background=background)
 

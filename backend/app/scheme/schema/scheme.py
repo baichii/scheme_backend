@@ -15,12 +15,7 @@ class SchemeParamBase(SchemaBase):
 
 
 class CreateSchemeParam(SchemeParamBase):
-    """创建方案参数(api传入参数)"""
-
-
-class CreateSchemeInternal(SchemeParamBase):
-    """创建方案参数(上传数据库)"""
-    id: int = Field(description="方案ID")
+    """创建方案参数"""
 
 
 class UpdateSchemeParam(SchemeParamBase):

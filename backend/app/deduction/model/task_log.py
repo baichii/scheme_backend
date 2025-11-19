@@ -1,7 +1,7 @@
 import sqlalchemy as sa
 from sqlalchemy.orm import Mapped, mapped_column
 
-from backend.common.enums import TaskLogType as MessageType, TaskLogLevel as MessageLevel
+from backend.common.enums import TaskLogLevel as MessageLevel, TaskLogType as MessageType
 from backend.common.model import Base, snowflake_id_key
 
 
@@ -18,4 +18,3 @@ class TaskLog(Base):
     content: Mapped[str] = mapped_column(sa.String(512), comment="任务执行日志")
     type: Mapped[MessageType] = mapped_column(sa.Enum(MessageType), comment="消息类型")
     level: Mapped[MessageLevel] = mapped_column(sa.Enum(MessageLevel), comment="消息等级")
-

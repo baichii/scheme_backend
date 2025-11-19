@@ -18,4 +18,6 @@ class DeductionPlan(Base):
     status: Mapped[str] = mapped_column(sa.String(32), comment="推理方案状态")
     task_config: Mapped[list[dict]] = mapped_column(sa.JSON, comment="推演方案参数")
     env_instance_id: Mapped[int | None] = mapped_column(comment="环境实例ID")
-    start_time: Mapped[datetime | None] = mapped_column(sa.DateTime(timezone=True), nullable=True, comment="推演开始时间")
+    start_time: Mapped[datetime | None] = mapped_column(
+        sa.DateTime(timezone=True), nullable=True, comment="推演开始时间"
+    )

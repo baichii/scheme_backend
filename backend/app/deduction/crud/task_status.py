@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy_crud_plus import CRUDPlus
 
 from backend.app.deduction.model.task_status import TaskStatus
-from backend.app.deduction.schema.task_status import CreateTaskStatusInternal, UpdateTaskStatusParam
+from backend.app.deduction.schema.task_status import CreateTaskStatusParam, UpdateTaskStatusParam
 
 
 class CRUDTaskStatus(CRUDPlus[TaskStatus]):
@@ -22,7 +22,7 @@ class CRUDTaskStatus(CRUDPlus[TaskStatus]):
         """根据推演id获取任务状态"""
         return await self.select_models(db, deduce_id__eq=deduce_id)
 
-    async def create(self, db: AsyncSession, obj: CreateTaskStatusInternal) -> TaskStatus:
+    async def create(self, db: AsyncSession, obj: CreateTaskStatusParam) -> TaskStatus:
         """创建任务状态"""
         return await self.create_model(db, obj, flush=True)
 

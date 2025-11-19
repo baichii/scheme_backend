@@ -2,8 +2,8 @@ from datetime import datetime
 
 from pydantic import ConfigDict, Field
 
-from backend.common.schema import SchemaBase
 from backend.common.enums import DeductionPlanStatus
+from backend.common.schema import SchemaBase
 
 
 class DeductionPlanParamBase(SchemaBase):
@@ -16,12 +16,12 @@ class DeductionPlanParamBase(SchemaBase):
 
 
 class CreateDeductionPlanParam(DeductionPlanParamBase):
-    """创建推演方案配置参数(api传入参数)"""
+    """创建推演方案配置参数"""
 
 
 class CreateDeductionPlanInternal(DeductionPlanParamBase):
-    """创建推演方案配置参数(上传数据库)"""
-    id: int = Field(description="推演方案ID")
+    """创建推演方案配置参数(内部使用，添加默认状态)"""
+
     status: DeductionPlanStatus = Field(description="推演方案状态")
 
 
@@ -31,6 +31,7 @@ class UpdateDeductionPlanParam(DeductionPlanParamBase):
 
 class ExecuteDeductionPlanParam(SchemaBase):
     """执行推演方案参数"""
+
     env_instance_id: int = Field(description="环境实例ID")
 
 
@@ -40,6 +41,8 @@ class DeleteDeductionPlanParam(SchemaBase):
 
 class GetDeductionPlanParam(DeductionPlanParamBase):
     """获取推演方案配置参数"""
+
+    model_config = ConfigDict(from_attributes=True)
 
     id: int = Field(description="推演方案ID")
     status: DeductionPlanStatus = Field(description="推演方案状态")

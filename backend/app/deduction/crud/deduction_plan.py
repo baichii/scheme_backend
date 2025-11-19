@@ -4,7 +4,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy_crud_plus import CRUDPlus
 
 from backend.app.deduction.model.deduction_plan import DeductionPlan
-from backend.app.deduction.schema.deduction_plan import CreateDeductionPlanInternal, UpdateDeductionPlanParam, DeleteDeductionPlanParam, ExecuteDeductionPlanParam
+from backend.app.deduction.schema.deduction_plan import (
+    CreateDeductionPlanInternal,
+    DeleteDeductionPlanParam,
+    ExecuteDeductionPlanParam,
+    UpdateDeductionPlanParam,
+)
 
 
 class CRUDDeductionPlan(CRUDPlus[DeductionPlan]):

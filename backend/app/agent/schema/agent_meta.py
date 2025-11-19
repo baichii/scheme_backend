@@ -21,6 +21,7 @@ class CreateAgentParam(AgentMetaSchemaBase):
 
 class CreateAgentInternal(AgentMetaSchemaBase):
     """创建智能体元数据参数(数据库存储参数)"""
+
     id: int = Field(description="智能体ID")
     load: str = Field(description="智能体加载名称")
     url: str = Field(description="智能体文件存储路径")
@@ -38,4 +39,3 @@ class GetAgentMetaDetail(AgentMetaSchemaBase):
     id: int = Field(description="智能体ID")
     create_at: datetime = Field(description="创建时间")
     update_at: datetime | None = Field(None, description="更新时间")
-

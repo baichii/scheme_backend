@@ -1,6 +1,12 @@
 from fastapi import APIRouter
 
-from backend.app.deduction.schema.deduction_plan import CreateDeductionPlanParam, GetDeductionPlanParam, UpdateDeductionPlanParam, DeleteDeductionPlanParam, ExecuteDeductionPlanParam
+from backend.app.deduction.schema.deduction_plan import (
+    CreateDeductionPlanParam,
+    DeleteDeductionPlanParam,
+    ExecuteDeductionPlanParam,
+    GetDeductionPlanParam,
+    UpdateDeductionPlanParam,
+)
 from backend.app.deduction.service.deduction_plan_service import deduction_plan_service
 from backend.common.response.response_schema import ResponseModel, ResponseSchemaModel, response_base
 from backend.database.db import CurrentSession, CurrentSessionTransaction
@@ -16,35 +22,45 @@ async def get_all_deduction_plans(db: CurrentSession) -> ResponseSchemaModel[lis
 
 
 @router.get("/{pk}", summary="获取推演方案配置详情")
-async def get_deduction_plan_by_id(db: CurrentSession, pk: int) -> ResponseSchemaModel[GetDeductionPlanParam]:
+async def get_deduction_plan_by_id(
+    db: CurrentSession, pk: int
+) -> ResponseSchemaModel[GetDeductionPlanParam]:
     """获取推演方案配置详情"""
     deduction_plan = await deduction_plan_service.get(db=db, pk=pk)
     return response_base.success(data=deduction_plan)
 
 
 @router.post("/create", summary="创建推演方案配置")
-async def create_deduction_plan(db: CurrentSessionTransaction, param: CreateDeductionPlanParam) -> ResponseSchemaModel[int]:
+async def create_deduction_plan(
+    db: CurrentSessionTransaction, param: CreateDeductionPlanParam
+) -> ResponseSchemaModel[int]:
     """创建推演方案配置"""
     deduction_plan = await deduction_plan_service.create(db=db, obj=param)
     return response_base.success(data=deduction_plan.id)
 
 
 @router.put("/update/{pk}", summary="更新推演方案配置")
-async def update_deduction_plan(db: CurrentSessionTransaction, pk: int, param: UpdateDeductionPlanParam) -> ResponseSchemaModel[int]:
+async def update_deduction_plan(
+    db: CurrentSessionTransaction, pk: int, param: UpdateDeductionPlanParam
+) -> ResponseSchemaModel[int]:
     """更新推演方案配置"""
     deduction_plan = await deduction_plan_service.update(db=db, pk=pk, obj=param)
     return response_base.success(data=deduction_plan.id)
 
 
 @router.post("/execute/{pk}", summary="执行推演方案配置")
-async def execute_deduction_plan(db: CurrentSessionTransaction, pk: int, obj: ExecuteDeductionPlanParam) -> ResponseSchemaModel[int]:
+async def execute_deduction_plan(
+    db: CurrentSessionTransaction, pk: int, obj: ExecuteDeductionPlanParam
+) -> ResponseSchemaModel[int]:
     """执行推演方案配置"""
     deduction_plan = await deduction_plan_service.execute(db=db, pk=pk, obj=obj)
     return response_base.success(data=deduction_plan.id)
 
 
 @router.delete("", summary="批量删除推演方案配置")
-async def delete_deduction_plan(db: CurrentSessionTransaction, obj: DeleteDeductionPlanParam) -> ResponseModel:
+async def delete_deduction_plan(
+    db: CurrentSessionTransaction, obj: DeleteDeductionPlanParam
+) -> ResponseModel:
     """删除推演方案配置"""
     count = await deduction_plan_service.delete(db=db, obj=obj)
     if count > 0:

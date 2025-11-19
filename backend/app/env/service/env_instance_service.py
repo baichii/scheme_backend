@@ -66,6 +66,7 @@ class EnvInstanceService:
     async def delete_all(*, db: AsyncSession) -> int:
         """删除所有环境配置实例"""
         from sqlalchemy import delete
+
         from backend.app.env.model.env_instance import EnvInstance
 
         stmt = delete(EnvInstance)

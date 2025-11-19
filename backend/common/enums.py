@@ -39,6 +39,7 @@ class DeductionPlanStatus(StrEnum):
 
 class TaskStatus(StrEnum):
     """推演任务状态枚举"""
+
     UNKNOWN = "unknown"
     NORMAL = "normal"
     ABNORMAL = "abnormal"
@@ -47,6 +48,7 @@ class TaskStatus(StrEnum):
 
 class TaskLogType(StrEnum):
     """推演任务消息类型枚举"""
+
     log = "log"
     event = "event"
     echart = "echart"
@@ -54,6 +56,7 @@ class TaskLogType(StrEnum):
 
 class TaskLogLevel(StrEnum):
     """推演任务消息等级枚举"""
+
     info = "info"
     warning = "warning"
     error = "error"
