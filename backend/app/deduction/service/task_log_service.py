@@ -20,9 +20,9 @@ class TaskLogService:
         return task_log
 
     @staticmethod
-    async def get_all(*, db: AsyncSession) -> Sequence[TaskLog]:
-        """获取所有任务日志"""
-        task_logs = await task_log_dao.get_all(db)
+    async def get_by_task_id(*, db: AsyncSession, task_id: int) -> Sequence[TaskLog]:
+        """根据任务ID获取任务日志"""
+        task_logs = await task_log_dao.get_by_task_id(db, task_id)
         return task_logs
 
     @staticmethod

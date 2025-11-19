@@ -38,6 +38,18 @@ async def create_agent_meta(
     agent_meta = await agent_meta_service.create(db=db, obj=obj, file=file)
     return response_base.success(data=agent_meta.id)
 
+# # Note: 暂时屏蔽
+# @router.post("/update/{pk}", summary="智能体元数据")
+# async def update_agent_meta(
+#     db: CurrentSessionTransaction,
+#     pk: int,
+#     obj: CreateAgentParam,
+# ) -> ResponseSchemaModel[int]:
+#     """更新智能体元数据"""
+#     agent_meta = await agent_meta_service.update(db=db, pk=pk, obj=obj)
+#     return response_base.success(data=agent_meta.id)
+
+
 
 @router.delete("", summary="批量删除智能体元数据")
 async def delete_agent_meta(

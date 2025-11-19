@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import sqlalchemy as sa
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -12,7 +10,8 @@ class TaskStatus(Base):
 
     __tablename__ = "task_status"
 
-    task_id: Mapped[snowflake_id_key] = mapped_column(sa.Integer, comment="任务运行唯一ID")
+    id: Mapped[snowflake_id_key] = mapped_column(sa.Integer, comment="任务运行ID")
+
     suffix: Mapped[int] = mapped_column(sa.Integer, comment="合成ID后缀")
-    deduce_id: Mapped[int] = mapped_column(sa.Integer, comment="推演方案ID")
-    status: Mapped[DeductionTaskStatus] = mapped_column(sa.Enum(DeductionTaskStatus), comment="推演任务状态")
+    deduce_id: Mapped[int] = mapped_column(sa.Integer, comment="推演ID")
+    status: Mapped[DeductionTaskStatus] = mapped_column(sa.Enum(DeductionTaskStatus), comment="推演状态")

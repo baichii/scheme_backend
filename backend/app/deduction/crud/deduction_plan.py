@@ -4,14 +4,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy_crud_plus import CRUDPlus
 
 from backend.app.deduction.model.deduction_plan import DeductionPlan
-from backend.app.deduction.schema.deduction_plan import CreateDeductionPlanInternal
+from backend.app.deduction.schema.deduction_plan import CreateDeductionPlanInternal, UpdateDeductionPlanParam
 
 
 class CRUDDeductionPlan(CRUDPlus[DeductionPlan]):
     """推演方案配置数据库操作类"""
 
     async def get(self, db: AsyncSession, pk: int) -> DeductionPlan | None:
-        """获取推演方案配置"""
+        """获取推演方案详情"""
         return await self.select_model(db, pk)
 
     async def get_all(self, db: AsyncSession) -> Sequence[DeductionPlan]:
@@ -22,24 +22,17 @@ class CRUDDeductionPlan(CRUDPlus[DeductionPlan]):
         """根据名称获取推演方案配置"""
         return await self.select_model_by_column(db, name=name)
 
-    async def create(self, db: AsyncSession, obj: CreateDeductionPlanInternal) -> None:
+    async def create(self, db: AsyncSession, obj: CreateDeductionPlanInternal) -> DeductionPlan:
         """创建推演方案配置"""
-        await self.create_model(db, obj, flush=True)
+        return await self.create_model(db, obj, flush=True)
 
-    async def update(self, db: AsyncSession, pk: int, obj: dict) -> int:
-        """更新推演方案配置"""
-        deduction_plan = await self.get(db, pk)
-        if not deduction_plan:
-            return 0
-        await self.update_model(db, pk, obj)
-        return 1
+    async def update(self, db: AsyncSession, obj: UpdateDeductionPlanParam) -> int:
+        """更新推演方案"""
+        return await self.update_model(db, obj.id, obj)
 
-    async def delete(self, db: AsyncSession, pk: int) -> int:
-        """删除推演方案配置"""
-        deduction_plan = await self.get(db, pk)
-        if not deduction_plan:
-            return 0
-        await db.delete(deduction_plan)
-        return 1
+    async def delete(self, db: AsyncSession, pks: list[int]) -> int:
+        """批量删除推演方案"""
+        return await self.delete_model_by_column(db, allow_multiple=True, id__in=pks)
+
 
 deduction_plan_dao: CRUDDeductionPlan = CRUDDeductionPlan(DeductionPlan)

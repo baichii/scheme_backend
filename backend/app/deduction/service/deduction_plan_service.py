@@ -1,6 +1,7 @@
 from collections.abc import Sequence
 
 from sqlalchemy.ext.asyncio import AsyncSession
+from watchfiles import awatch
 
 from backend.app.deduction.crud.deduction_plan import deduction_plan_dao
 from backend.app.deduction.model.deduction_plan import DeductionPlan
@@ -58,11 +59,9 @@ class DeductionPlanService:
         return await deduction_plan_dao.get(db, obj.id)
 
     @staticmethod
-    async def delete(*, db: AsyncSession, pk: int) -> int:
-        """删除推理方案"""
-        deduction_plan = await deduction_plan_dao.delete(db, pk)
-        if not deduction_plan:
-            raise errors.NotFoundError(msg="推理方案不存在")
-        return 1
+    async def delete(*, db: AsyncSession, pks: list[int]) -> int:
+        """批量删除任务结果"""
+        return await deduction_plan_dao.delete(db, pks)
+
 
 deduction_plan_service: DeductionPlanService = DeductionPlanService()

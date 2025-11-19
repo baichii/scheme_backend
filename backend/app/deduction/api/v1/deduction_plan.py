@@ -26,18 +26,20 @@ async def get_deduction_plan_by_id(db: CurrentSession, pk: int) -> ResponseSchem
 async def create_deduction_plan(db: CurrentSessionTransaction, param: CreateDeductionPlanParam) -> ResponseSchemaModel[GetDeductionPlanParam]:
     """创建推演方案配置"""
     deduction_plan = await deduction_plan_service.create(db=db, obj=param)
-    return response_base.success(data=deduction_plan)
+    return response_base.success(data=deduction_plan.id)
 
 
-@router.put("/update", summary="更新推演方案配置")
-async def update_deduction_plan(db: CurrentSessionTransaction, param: UpdateDeductionPlanParam) -> ResponseSchemaModel[GetDeductionPlanParam]:
+@router.put("/update/{pk}", summary="更新推演方案配置")
+async def update_deduction_plan(db: CurrentSessionTransaction, pk: int, param: UpdateDeductionPlanParam) -> ResponseSchemaModel[GetDeductionPlanParam]:
     """更新推演方案配置"""
-    deduction_plan = await deduction_plan_service.update(db=db, obj=param)
-    return response_base.success(data=deduction_plan)
+    deduction_plan = await deduction_plan_service.update(db=db, pk=pk, obj=param)
+    return response_base.success(data=deduction_plan.id)
 
 
-@router.delete("/{pk}", summary="根据ID删除推演方案配置")
-async def delete_deduction_plan(db: CurrentSessionTransaction, pk: int) -> ResponseModel:
+@router.delete("", summary="")
+async def delete_deduction_plan(db: CurrentSessionTransaction, pks: list[int]) -> ResponseModel:
     """删除推演方案配置"""
-    await deduction_plan_service.delete(db=db, pk=pk)
-    return response_base.success()
+    count = await deduction_plan_service.delete(db=db, pks=pks)
+    if count > 0:
+        return response_base.success()
+    return response_base.fail()
