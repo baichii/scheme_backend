@@ -35,16 +35,16 @@ async def create_agent_meta(
     file: UploadFile = File(default=...)
 ) -> ResponseModel:
     """创建智能体元数据"""
-    await agent_meta_service.create(db=db, obj=obj, file=file)
-    return response_base.success()
+    agent_meta = await agent_meta_service.create(db=db, obj=obj, file=file)
+    return response_base.success(data=agent_meta.id)
 
 
-@router.delete("/{pk}", summary="删除智能体元数据")
+@router.delete("", summary="批量删除智能体元数据")
 async def delete_agent_meta(
-    db: CurrentSessionTransaction, pk: int
+    db: CurrentSessionTransaction, pks: list[int]
 ) -> ResponseModel:
     """删除智能体元数据"""
-    count = await agent_meta_service.delete(db=db, pk=pk)
+    count = await agent_meta_service.delete(db=db, pks=pks)
     if count > 0:
         return response_base.success()
     return response_base.fail()

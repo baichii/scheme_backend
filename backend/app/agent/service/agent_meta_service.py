@@ -30,7 +30,7 @@ class AgentMetaService:
         return agent_metas
 
     @staticmethod
-    async def create(*, db: AsyncSession, obj: CreateAgentParam, file: UploadFile) -> None:
+    async def create(*, db: AsyncSession, obj: CreateAgentParam, file: UploadFile) -> AgentMeta:
         """创建智能体
 
         1. 文件校验，上传
@@ -66,15 +66,12 @@ class AgentMetaService:
             supported_env_templates=obj.supported_env_templates,
             url=url,
         )
-        await agent_meta_dao.create(db, agent)
+        return await agent_meta_dao.create(db, agent)
 
     @staticmethod
-    async def delete(*, db: AsyncSession, pk: int) -> int:
+    async def delete(*, db: AsyncSession, pks: list[int]) -> int:
         """删除智能体"""
-        agent = await agent_meta_dao.get(db, pk)
-        if not agent:
-            raise errors.NotFoundError(msg="智能体不存在")
-        count = await agent_meta_dao.delete(db, pk)
+        count = await agent_meta_dao.delete(db, pks)
         return count
 
 

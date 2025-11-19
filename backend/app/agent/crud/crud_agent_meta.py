@@ -18,17 +18,13 @@ class CRUDAgentMeta(CRUDPlus[AgentMeta]):
         """获取所有智能体元数据"""
         return await self.select_models(db)
 
-    async def create(self, db: AsyncSession, obj: CreateAgentInternal) -> None:
+    async def create(self, db: AsyncSession, obj: CreateAgentInternal) -> AgentMeta:
         """创建智能体元数据"""
-        await self.create_model(db, obj, flush=True)
+        return await self.create_model(db, obj, flush=True)
 
-    async def delete(self, db: AsyncSession, pk: int) -> int:
+    async def delete(self, db: AsyncSession, pks: list[int]) -> int:
         """根据智能体ID删除智能体元数据"""
-        agent = await self.get(db, pk)
-        if not agent:
-            return 0
-        await db.delete(agent)
-        return 1
+        return await self.delete_model_by_column(db, allow_multiple=True, id__in=pks)
 
 
 agent_meta_dao: CRUDAgentMeta = CRUDAgentMeta(AgentMeta)
