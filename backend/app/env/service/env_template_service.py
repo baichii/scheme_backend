@@ -34,12 +34,12 @@ class EnvTemplateService:
         return env_template
 
     @staticmethod
-    async def create(*, db: AsyncSession, obj: CreateEnvTemplateParam) -> None:
+    async def create(*, db: AsyncSession, obj: CreateEnvTemplateParam) -> EnvTemplate:
         """创建环境配置模版"""
         env_template = await env_template_dao.get_by_name(db, obj.name)
         if env_template:
             raise errors.ConflictError(msg="环境配置模版名称已存在")
-        await env_template_dao.create(db, obj)
+        return await env_template_dao.create(db, obj)
 
     @staticmethod
     async def delete(*, db: AsyncSession, pk: int) -> int:

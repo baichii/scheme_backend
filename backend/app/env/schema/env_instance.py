@@ -17,10 +17,6 @@ class CreateEnvInstanceParam(EnvInstanceParamBase):
     """创建环境配置实例参数"""
 
 
-class UpdateEnvInstanceParam(EnvInstanceParamBase):
-    """更新环境配置实例参数"""
-
-
 class GetEnvInstanceDetail(EnvInstanceParamBase):
     """环境配置实例详情"""
 

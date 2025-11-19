@@ -3,8 +3,9 @@ from collections.abc import Sequence
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.env.crud.crud_env_instance import env_instance_dao
+from backend.app.env.crud.crud_env_template import env_template_dao
 from backend.app.env.model.env_instance import EnvInstance
-from backend.app.env.schema.env_instance import CreateEnvInstanceParam, UpdateEnvInstanceParam
+from backend.app.env.schema.env_instance import CreateEnvInstanceParam
 from backend.common.exception import errors
 
 
@@ -40,20 +41,17 @@ class EnvInstanceService:
         return env_instances
 
     @staticmethod
-    async def create(*, db: AsyncSession, obj: CreateEnvInstanceParam) -> None:
+    async def create(*, db: AsyncSession, obj: CreateEnvInstanceParam) -> EnvInstance:
         """创建环境配置实例"""
+        # 验证模板是否存在
+        template = await env_template_dao.get(db, obj.template_id)
+        if not template:
+            raise errors.NotFoundError(msg="环境配置模版不存在")
+        # 检查名称是否重复
         env_instance = await env_instance_dao.get_by_name(db, obj.name)
         if env_instance:
             raise errors.ConflictError(msg="环境配置实例名称已存在")
-        await env_instance_dao.create(db, obj)
-
-    @staticmethod
-    async def update(*, db: AsyncSession, obj: UpdateEnvInstanceParam) -> None:
-        """更新环境配置实例"""
-        env_instance = await env_instance_dao.get(db, obj.id)
-        if not env_instance:
-            raise errors.NotFoundError(msg="环境配置实例不存在")
-        await env_instance_dao.update(db, obj)
+        return await env_instance_dao.create(db, obj)
 
     @staticmethod
     async def delete(*, db: AsyncSession, pk: int) -> int:

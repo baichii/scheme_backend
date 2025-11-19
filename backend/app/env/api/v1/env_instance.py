@@ -3,7 +3,6 @@ from fastapi import APIRouter
 from backend.app.env.schema.env_instance import (
     CreateEnvInstanceParam,
     GetEnvInstanceDetail,
-    UpdateEnvInstanceParam,
 )
 from backend.app.env.service.env_instance_service import env_instance_service
 from backend.common.response.response_schema import ResponseModel, ResponseSchemaModel, response_base
@@ -41,18 +40,10 @@ async def get_env_instance_by_template_id(db: CurrentSession, template_id: int) 
 @router.post("/create", summary="创建环境配置实例")
 async def create_env_instance(
     db: CurrentSessionTransaction, obj: CreateEnvInstanceParam
-) -> ResponseModel:
+) -> ResponseSchemaModel[int]:
     """创建环境配置实例"""
-    await env_instance_service.create(db=db, obj=obj)
-    return response_base.success()
-
-@router.post("/update", summary="更新环境配置实例")
-async def update_env_instance(
-    db: CurrentSessionTransaction, obj: UpdateEnvInstanceParam
-) -> ResponseModel:
-    """更新环境配置实例"""
-    await env_instance_service.update(db=db, obj=obj)
-    return response_base.success()
+    env_instance = await env_instance_service.create(db=db, obj=obj)
+    return response_base.success(data=env_instance.id)
 
 
 @router.delete("/{pk}", summary="根据ID删除环境配置实例")

@@ -32,10 +32,10 @@ async def get_env_template_by_name(db: CurrentSession, name: str) -> ResponseSch
 @router.post("/create", summary="创建环境配置模版")
 async def create_env_template(
     db: CurrentSessionTransaction, obj: CreateEnvTemplateParam
-) -> ResponseModel:
+) -> ResponseSchemaModel[int]:
     """创建环境配置模版"""
-    await env_template_service.create(db=db, obj=obj)
-    return response_base.success()
+    env_template = await env_template_service.create(db=db, obj=obj)
+    return response_base.success(data=env_template.id)
 
 
 @router.delete("/{pk}", summary="根据ID删除环境配置模版")

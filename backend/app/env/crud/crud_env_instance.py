@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy_crud_plus import CRUDPlus
 
 from backend.app.env.model.env_instance import EnvInstance
-from backend.app.env.schema.env_instance import CreateEnvInstanceParam, UpdateEnvInstanceParam
+from backend.app.env.schema.env_instance import CreateEnvInstanceParam
 
 
 class CRUDEnvInstance(CRUDPlus[EnvInstance]):
@@ -29,13 +29,9 @@ class CRUDEnvInstance(CRUDPlus[EnvInstance]):
         result = await db.execute(stmt)
         return result.scalars().all()
 
-    async def create(self, db: AsyncSession, obj: CreateEnvInstanceParam) -> None:
+    async def create(self, db: AsyncSession, obj: CreateEnvInstanceParam) -> EnvInstance:
         """创建环境配置实例"""
-        await self.create_model(db, obj, flush=True)
-
-    async def update(self, db: AsyncSession, obj: UpdateEnvInstanceParam) -> None:
-        """更新环境配置实例"""
-        await self.update_model(db, obj, flush=True)
+        return await self.create_model(db, obj, flush=True)
 
     async def delete(self, db: AsyncSession, pk: int) -> int:
         """删除环境配置实例"""
@@ -44,5 +40,6 @@ class CRUDEnvInstance(CRUDPlus[EnvInstance]):
             return 0
         await db.delete(env_instance)
         return 1
+
 
 env_instance_dao: CRUDEnvInstance = CRUDEnvInstance(EnvInstance)

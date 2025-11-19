@@ -22,9 +22,9 @@ class CRUDEnvTemplate(CRUDPlus[EnvTemplate]):
         """根据名称获取环境配置模版"""
         return await self.select_model_by_column(db, name=name)
 
-    async def create(self, db: AsyncSession, obj: CreateEnvTemplateParam) -> None:
+    async def create(self, db: AsyncSession, obj: CreateEnvTemplateParam) -> EnvTemplate:
         """创建环境配置模版"""
-        await self.create_model(db, obj, flush=True)
+        return await self.create_model(db, obj, flush=True)
 
     async def delete(self, db: AsyncSession, pk: int) -> int:
         """删除环境配置模版"""
