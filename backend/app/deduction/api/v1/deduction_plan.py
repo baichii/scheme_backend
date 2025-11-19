@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from backend.app.deduction.schema.deduction_plan import CreateDeductionPlanParam, GetDeductionPlanParam
+from backend.app.deduction.schema.deduction_plan import CreateDeductionPlanParam, GetDeductionPlanParam, UpdateDeductionPlanParam
 from backend.app.deduction.service.deduction_plan_service import deduction_plan_service
 from backend.common.response.response_schema import ResponseModel, ResponseSchemaModel, response_base
 from backend.database.db import CurrentSession, CurrentSessionTransaction
@@ -23,10 +23,18 @@ async def get_deduction_plan_by_id(db: CurrentSession, pk: int) -> ResponseSchem
 
 
 @router.post("/create", summary="创建推演方案配置")
-async def create_deduction_plan(db: CurrentSessionTransaction, param: CreateDeductionPlanParam) -> ResponseModel:
+async def create_deduction_plan(db: CurrentSessionTransaction, param: CreateDeductionPlanParam) -> ResponseSchemaModel[GetDeductionPlanParam]:
     """创建推演方案配置"""
-    await deduction_plan_service.create(db=db, obj=param)
-    return response_base.success()
+    deduction_plan = await deduction_plan_service.create(db=db, obj=param)
+    return response_base.success(data=deduction_plan)
+
+
+@router.put("/update", summary="更新推演方案配置")
+async def update_deduction_plan(db: CurrentSessionTransaction, param: UpdateDeductionPlanParam) -> ResponseSchemaModel[GetDeductionPlanParam]:
+    """更新推演方案配置"""
+    deduction_plan = await deduction_plan_service.update(db=db, obj=param)
+    return response_base.success(data=deduction_plan)
+
 
 @router.delete("/{pk}", summary="根据ID删除推演方案配置")
 async def delete_deduction_plan(db: CurrentSessionTransaction, pk: int) -> ResponseModel:

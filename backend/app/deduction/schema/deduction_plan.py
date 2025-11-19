@@ -26,10 +26,12 @@ class CreateDeductionPlanInternal(DeductionPlanParamBase):
 
 
 
-class UpdateDeductionPlanParam(DeductionPlanParamBase):
+class UpdateDeductionPlanParam(SchemaBase):
     """更新推演方案配置参数"""
     id: int = Field(description="推演方案ID")
-    plan_config: dict = Field(description="推演方案配置")
+    name: str | None = Field(None, description="推演方案名称")
+    description: str | None = Field(None, description="推演方案描述")
+    task_config: dict | None = Field(None, description="推演方案配置")
 
 
 class GetDeductionPlanParam(SchemaBase):

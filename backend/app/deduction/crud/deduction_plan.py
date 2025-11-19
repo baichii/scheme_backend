@@ -26,6 +26,14 @@ class CRUDDeductionPlan(CRUDPlus[DeductionPlan]):
         """创建推演方案配置"""
         await self.create_model(db, obj, flush=True)
 
+    async def update(self, db: AsyncSession, pk: int, obj: dict) -> int:
+        """更新推演方案配置"""
+        deduction_plan = await self.get(db, pk)
+        if not deduction_plan:
+            return 0
+        await self.update_model(db, pk, obj)
+        return 1
+
     async def delete(self, db: AsyncSession, pk: int) -> int:
         """删除推演方案配置"""
         deduction_plan = await self.get(db, pk)

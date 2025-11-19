@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.deduction.crud.deduction_plan import deduction_plan_dao
 from backend.app.deduction.model.deduction_plan import DeductionPlan
-from backend.app.deduction.schema.deduction_plan import CreateDeductionPlanParam, CreateDeductionPlanInternal
+from backend.app.deduction.schema.deduction_plan import CreateDeductionPlanParam, CreateDeductionPlanInternal, UpdateDeductionPlanParam
 from backend.common.exception import errors
 from backend.utils.snowflake import snowflake
 from backend.common.enums import DeductionPlanStatus
@@ -28,7 +28,7 @@ class DeductionPlanService:
         return deduction_plans
 
     @staticmethod
-    async def create(*, db: AsyncSession, obj: CreateDeductionPlanParam):
+    async def create(*, db: AsyncSession, obj: CreateDeductionPlanParam) -> DeductionPlan:
         """创建推理方案"""
 
         unique_id = snowflake.generate()
@@ -38,6 +38,24 @@ class DeductionPlanService:
             status=DeductionPlanStatus.INACTIVE,
         )
         await deduction_plan_dao.create(db, obj_internal)
+        # 返回创建的对象
+        return await deduction_plan_dao.get(db, unique_id)
+
+    @staticmethod
+    async def update(*, db: AsyncSession, obj: UpdateDeductionPlanParam) -> DeductionPlan:
+        """更新推理方案"""
+        # 检查是否存在
+        existing = await deduction_plan_dao.get(db, obj.id)
+        if not existing:
+            raise errors.NotFoundError(msg="推理方案不存在")
+
+        # 只更新提供的字段
+        update_data = obj.model_dump(exclude_unset=True, exclude={'id'})
+        if update_data:
+            await deduction_plan_dao.update(db, obj.id, update_data)
+
+        # 返回更新后的对象
+        return await deduction_plan_dao.get(db, obj.id)
 
     @staticmethod
     async def delete(*, db: AsyncSession, pk: int) -> int:
