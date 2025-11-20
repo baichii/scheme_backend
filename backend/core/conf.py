@@ -67,11 +67,20 @@ class Settings(BaseSettings):
     LOG_ACCESS_FILENAME: str = "scheme_backend_access.log"
     LOG_ERROR_FILENAME: str = "scheme_backend_error.log"
 
-    # # matrix rabbitmq 配置
-    # MATRIX_RABBITMQ_HOST: str = "localhost"
-    # MATRIX_RABBITMQ_PORT: int = 5672
-    # MATRIX_RABBITMQ_USER: str = "guest"
-    # MATRIX_RABBITMQ_PASSWORD: str = "guest"
+    # engine配置
+    ENGINE_ENDPOINT: str
+    ENGINE_RABBITMQ_HOST: str
+    ENGINE_RABBITMQ_PORT: int
+    ENGINE_RABBITMQ_USER: str
+    ENGINE_RABBITMQ_PASSWORD: str
+    ENGINE_RABBITMQ_QUEUE_NAME: str
+
+    # engine api路由
+    ENGINE_CREATE: str = "/api/create"
+    ENGINE_UPDATE: str = "/api/update"
+    ENGINE_QUERY: str = "/api/query"
+    ENGINE_STOP: str = "/api/stop"
+    ENGINE_HEALTH_CHECK: str = "/api/health_check"
 
 
 @lru_cache

@@ -1,6 +1,7 @@
 from enum import Enum, IntEnum as SourceIntEnum
 from typing import Any, TypeVar
 
+
 T = TypeVar("T", bound=Enum)
 
 
@@ -49,15 +50,24 @@ class TaskStatus(StrEnum):
 class TaskLogType(StrEnum):
     """推演任务消息类型枚举"""
 
-    log = "log"
-    event = "event"
-    echart = "echart"
+    LOG = "log"
+    EVENT = "event"
+    ECHART = "echart"
 
 
 class TaskLogLevel(StrEnum):
     """推演任务消息等级枚举"""
 
-    info = "info"
-    warning = "warning"
-    error = "error"
-    critical = "critical"
+    INFO = "info"
+    WARNING = "warning"
+    ERROR = "error"
+    CRITICAL = "critical"
+
+
+class EngineRequestType(IntEnum):
+    """engine请求类型"""
+
+    CREATE = 1
+    UPDATE = 2
+    QUERY = 3
+    STOP = 4
