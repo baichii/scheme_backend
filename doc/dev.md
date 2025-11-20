@@ -4,11 +4,11 @@
 
 #### 1. 工程说明
 
-这是一个智能体调度工程的后端，整个工程由3大组件构建，整体设计思路为前后分离，前端仅和后端交互，后端负责和数据库，engine交互
+这是一个智能体调度工程的后端，整个工程由3大组件(frontend ,backend, engine)构成，设计思路为前后分离，前端仅和后端交互，后端负责和数据库，engine交互 
 
 + Scheme-frontend(ts + react)
 
-  前端操作界面，仅和scheme-backend通信，将前端的请求和配置发送给后端
+  前端操作界面，增删改查，将前端的请求和配置发送给后端
 
 + Scheme-backend(python + fastapi + postrgesql + minio)
 
@@ -16,9 +16,7 @@
 
 + engine(python + celery + redis + rabbitmq)
 
-  智能体执行引擎，接受后端发送过来的执行方案，运行智能体，负责和env交互，执行动作，通过redis处理内部状态，将日志、状态等数据写到rabbitmq中，供backend查询更新数据库
-
-  
+  智能体执行引擎，接受后端发送过来的执行方案，运行智能体，负责和env交互，执行动作，通过redis处理内部状态，提供智能体执行状态接口，后端定期请求获取执行中的智能体状态，将日志等数据写到rabbitmq中，供backend查询更新数据库
 
   
 
@@ -72,9 +70,28 @@
 
 #### 3. 开发计划
 
+考虑
+
 + 先开发scheme-backend，基于postman/gradio简单界面，测试接口和各种后端功能，这个过程中，可以迭代可能不完整的数据协议
 + 开发scheme-backend，并开发一个mock-scheme-backend服务，用来测试评估前端开发
 + 对接，联合调试
+
+
+
+#### todo list
+
+K1, 静态测试
+
++ 测试环境模版
++ 测试环境实例
++ 测试agent meta
+
+K2:  
+
++ 测试scheme
++ 测试deductio play 不含执行
+
+
 
 
 
