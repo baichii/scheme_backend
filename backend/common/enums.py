@@ -71,3 +71,21 @@ class EngineRequestType(IntEnum):
     UPDATE = 2
     QUERY = 3
     STOP = 4
+
+
+class ParamType:
+    """参数类型枚举"""
+
+    LIST = "list"
+    STR = "str"
+    INT = "int"
+    FLOAT = "float"
+    BOOL = "bool"
+    DATETIME = "datetime"
+    TABLE = "table"
+    INDEX = "index"
+    ENUM = "enum"
+    ENUM_MULTI = "enum_multi"
+    AREA = "area"
+    NAMED_AREA = "named_area"
+    ROUTE = "route"
