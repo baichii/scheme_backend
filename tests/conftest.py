@@ -21,13 +21,9 @@ async def client():
 async def cleanup_templates(client):
     """Auto cleanup all templates after each test"""
     yield
-    # Cleanup after test: get all templates and delete them one by one
+    # Cleanup after test: use the /all endpoint
     try:
-        response = await client.get("/api/v1/env/template/all")
-        if response.status_code == 200:
-            templates = response.json().get("data", [])
-            for template in templates:
-                await client.delete(f"/api/v1/env/template/{template['id']}")
+        await client.delete("/api/v1/env/template/all")
     except Exception:
         pass  # Ignore cleanup errors
 
