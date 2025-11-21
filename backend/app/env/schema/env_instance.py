@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Literal, Any, Callable
 
 from pydantic import ConfigDict, Field
 
@@ -10,7 +11,12 @@ class EnvInstanceParamBase(SchemaBase):
 
     template_id: int = Field(description="环境配置模版 ID")
     name: str = Field(description="环境配置实例名称")
-    params: dict = Field(description="环境配置实例参数")
+    params: list = Field(description="环境配置实例参数")
+
+    def model_dump(self, **kwargs) -> dict[str, Any]:
+        data = super().model_dump(**kwargs)
+        data["params"] = {item["name"]: item["value"] for item in data["params"]}
+        return data
 
 
 class CreateEnvInstanceParam(EnvInstanceParamBase):

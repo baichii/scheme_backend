@@ -6,12 +6,51 @@ from backend.common.enums import DeductionPlanStatus
 from backend.common.schema import SchemaBase
 
 
+class EnvParam(SchemaBase):
+    """推演方案环境配置"""
+    env_type: str = Field(description="环境类型", alias="envType")
+
+
+class AgentParam(SchemaBase):
+    """智能体配置"""
+    ip: str = Field(description="智能体IP")
+    port: int = Field(description="智能体端口")
+    side: str = Field(description="智能体侧")
+    deduce_id: str = Field(description="推演ID", alias="deduceId")
+    task_id: str = Field(description="任务ID", alias="taskId")
+    task_name: str = Field(description="任务名称", alias="taskName")
+
+
+class TaskSchemaParamBase(SchemaBase):
+    """推演任务配置"""
+    is_root: bool = Field(default=True, alias="isRoot")
+    is_box: bool = Field(default=False, alias="isBox")
+    id: str
+    env_config: EnvParam = Field(description="推演方案环境配置", alias="envConfig")
+    biz_value: dict = Field(description="业务参数", alias="bizValue")
+    pin: dict = Field(description="运行配置")
+    father: str | None = Field(None, description="父任务ID")
+
+
+class ContainerTaskParam(TaskSchemaParamBase):
+    """容器任务配置"""
+    is_box: bool = Field(default=True, alias="isBox")
+
+
+class AgentTaskParam(TaskSchemaParamBase):
+    """智能体任务配置"""
+    agent_load: str = Field(description="智能体文件名称", alias="agentLoad")
+    agent_url: str = Field(description="智能体URL", alias="agentUrl")
+    agent_config: AgentParam = Field(description="智能体配置", alias="agentConfig")
+    agent_requires: dict = Field(default={}, description="智能体依赖")
+
+
 class DeductionPlanParamBase(SchemaBase):
     """推演方案配置参数"""
 
     name: str = Field(description="推演方案名称")
     description: str | None = Field(None, description="推演方案描述")
-    task_config: list[dict] = Field(description="推演方案配置")
+    task_config: list[ContainerTaskParam | AgentTaskParam] = Field(description="推演方案配置")
     start_time: datetime | None = Field(None, description="推演开始时间")
 
 

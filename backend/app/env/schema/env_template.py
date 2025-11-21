@@ -2,14 +2,14 @@ from datetime import datetime
 
 from pydantic import ConfigDict, Field
 
-from backend.common.schema import SchemaBase
+from backend.common.schema import SchemaBase, ParamDeclarationSchema
 
 
 class EnvTemplateParamBase(SchemaBase):
     """环境配置模版参数"""
 
     name: str = Field(description="环境配置模版名称")
-    param_schema: dict = Field(description="环境配置模版参数 schema")
+    param_schema: list[ParamDeclarationSchema] = Field(description="环境配置模版参数 schema")
 
 
 class CreateEnvTemplateParam(EnvTemplateParamBase):
