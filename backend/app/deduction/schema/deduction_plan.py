@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from pydantic import ConfigDict, Field
 
@@ -7,15 +8,13 @@ from backend.common.schema import SchemaBase
 
 
 class EnvParam(SchemaBase):
-    """推演方案环境配置"""
+    """推演方案环境配置, 来源为envInstance"""
     env_type: str = Field(description="环境类型", alias="envType")
+    env_instance_config: dict[str, Any] = Field(description="环境实例参数", alias="envInstanceConfig")
 
 
 class AgentParam(SchemaBase):
     """智能体配置"""
-    ip: str = Field(description="智能体IP")
-    port: int = Field(description="智能体端口")
-    side: str = Field(description="智能体侧")
     deduce_id: str = Field(description="推演ID", alias="deduceId")
     task_id: str = Field(description="任务ID", alias="taskId")
     task_name: str = Field(description="任务名称", alias="taskName")
