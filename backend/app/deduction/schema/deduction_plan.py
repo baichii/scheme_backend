@@ -18,6 +18,7 @@ class AgentParam(SchemaBase):
     deduce_id: str = Field(description="推演ID", alias="deduceId")
     task_id: str = Field(description="任务ID", alias="taskId")
     task_name: str = Field(description="任务名称", alias="taskName")
+    agent_instance_config: dict[str, Any] = Field(description="任务实例参数", alias="agentInstanceConfig")
 
 
 class TaskSchemaParamBase(SchemaBase):
@@ -49,7 +50,7 @@ class DeductionPlanParamBase(SchemaBase):
 
     name: str = Field(description="推演方案名称")
     description: str | None = Field(None, description="推演方案描述")
-    task_config: list[ContainerTaskParam | AgentTaskParam] = Field(description="推演方案配置")
+    deduce_config: list[ContainerTaskParam | AgentTaskParam] = Field(description="推演方案配置")
     start_time: datetime | None = Field(None, description="推演开始时间")
 
 
