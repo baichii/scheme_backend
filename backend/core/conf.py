@@ -36,17 +36,18 @@ class Settings(BaseSettings):
     # fastapi
 
     # .env 数据库
-    DATABASE_TYPE: Literal["postgresql", "mysql"]
-    DATABASE_HOST: str
-    DATABASE_PORT: int
-    DATABASE_USER: str
-    DATABASE_PASSWORD: str
+    DATABASE_TYPE: Literal["postgresql", "mysql", "sqlite"]
+    DATABASE_HOST: str = "127.0.0.1"
+    DATABASE_PORT: int = 5432
+    DATABASE_USER: str = ""
+    DATABASE_PASSWORD: str = ""
 
     # 数据库
     DATABASE_ECHO: bool | Literal["debug"] = False
     DATABASE_POOL_ECHO: bool | Literal["debug"] = False
     DATABASE_SCHEMA: str = "scheme_backend"
     DATABASE_CHARSET: str = "utf8mb4"
+    DATABASE_SQLITE_PATH: str = "local_dev.db"
 
     # minio 用户配置
     MINIO_ENDPOINT: str

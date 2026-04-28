@@ -1,5 +1,6 @@
 import sys
 from collections.abc import AsyncGenerator
+from pathlib import Path
 from typing import Annotated
 from uuid import uuid4
 
@@ -15,12 +16,22 @@ from sqlalchemy.ext.asyncio import (
 from backend.common.log import log
 from backend.common.model import MappedBase
 from backend.core.conf import settings
+from backend.core.path_conf import BASE_PATH
 
 
 def create_database_url(*, unittest: bool = False) -> URL:
     """
     创建数据库链接
     """
+
+    if settings.DATABASE_TYPE == "sqlite":
+        sqlite_path = Path(settings.DATABASE_SQLITE_PATH)
+        if not sqlite_path.is_absolute():
+            sqlite_path = BASE_PATH / sqlite_path
+        if unittest:
+            sqlite_path = sqlite_path.with_name(f"{sqlite_path.stem}_test{sqlite_path.suffix}")
+        sqlite_path.parent.mkdir(parents=True, exist_ok=True)
+        return URL.create(drivername="sqlite+aiosqlite", database=str(sqlite_path))
 
     url = URL.create(
         drivername="mysql+asyncmy" if settings.DATABASE_TYPE == "mysql" else "postgresql+asyncpg",
@@ -40,18 +51,25 @@ def create_async_engine_and_session(url: str | URL) -> tuple[AsyncEngine, async_
     创建数据库引擎和session
     """
     try:
-        engine = create_async_engine(
-            url,
-            echo=settings.DATABASE_ECHO,
-            echo_pool=settings.DATABASE_POOL_ECHO,
-            future=True,
-            pool_size=10,
-            max_overflow=20,
-            pool_timeout=30,
-            pool_recycle=3600,
-            pool_pre_ping=True,
-            pool_use_lifo=False,
-        )
+        engine_kwargs = {
+            "echo": settings.DATABASE_ECHO,
+            "echo_pool": settings.DATABASE_POOL_ECHO,
+            "future": True,
+            "pool_pre_ping": True,
+        }
+        if settings.DATABASE_TYPE == "sqlite":
+            engine_kwargs["connect_args"] = {"check_same_thread": False}
+        else:
+            engine_kwargs.update(
+                {
+                    "pool_size": 10,
+                    "max_overflow": 20,
+                    "pool_timeout": 30,
+                    "pool_recycle": 3600,
+                    "pool_use_lifo": False,
+                }
+            )
+        engine = create_async_engine(url, **engine_kwargs)
     except Exception as e:
         log.error("数据库链接失败 {}", e)
         sys.exit()
