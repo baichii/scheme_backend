@@ -69,12 +69,17 @@ class Settings(BaseSettings):
     LOG_ERROR_FILENAME: str = "scheme_backend_error.log"
 
     # engine配置
+    ENGINE_CLIENT_MODE: Literal["fake", "matrix"] = "fake"
     ENGINE_ENDPOINT: str
     ENGINE_RABBITMQ_HOST: str
     ENGINE_RABBITMQ_PORT: int
     ENGINE_RABBITMQ_USER: str
     ENGINE_RABBITMQ_PASSWORD: str
     ENGINE_RABBITMQ_QUEUE_NAME: str
+    FAKE_ENGINE_PENDING_SECONDS: float = 0.1
+    FAKE_ENGINE_TASK_DURATION_SECONDS: float = 10.0
+    FAKE_ENGINE_STOPPING_SECONDS: float = 0.1
+    FAKE_ENGINE_LOG_INTERVAL_SECONDS: float = 1.0
 
     # engine api路由
     ENGINE_CREATE: str = "/api/create"
