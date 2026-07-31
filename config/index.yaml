@@ -1,0 +1,7 @@
+schema_version: 1
+environment_templates:
+  - local_test
+  - pysim
+scenario_types:
+  - local_test
+  - zc3

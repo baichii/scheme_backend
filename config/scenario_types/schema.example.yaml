@@ -1,0 +1,18 @@
+schema_version: 1
+kind: scenario_type
+
+key: example_scenario
+name: 示例想定类型
+description: 描述这一类想定为什么可以复用方案，以及支持哪些环境模板
+
+environment_templates:
+  - example_environment_template
+
+scenarios:
+  - example_scenario
+
+sides:
+  - key: red
+    name: 红方
+  - key: blue
+    name: 蓝方

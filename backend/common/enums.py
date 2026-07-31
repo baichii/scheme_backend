@@ -29,41 +29,6 @@ class StrEnum(_EnumBase, Enum):
     """字符串枚举基类"""
 
 
-class DeductionPlanStatus(StrEnum):
-    """推演方案状态枚举"""
-
-    INACTIVE = "inactive"
-    RUNNING = "running"
-    FINISHED = "finished"
-    ERROR = "error"
-
-
-class TaskStatus(StrEnum):
-    """推演任务状态枚举"""
-
-    UNKNOWN = "unknown"
-    NORMAL = "normal"
-    ABNORMAL = "abnormal"
-    TERMINAL = "terminal"
-
-
-class TaskLogType(StrEnum):
-    """推演任务消息类型枚举"""
-
-    LOG = "log"
-    EVENT = "event"
-    ECHART = "echart"
-
-
-class TaskLogLevel(StrEnum):
-    """推演任务消息等级枚举"""
-
-    INFO = "info"
-    WARNING = "warning"
-    ERROR = "error"
-    CRITICAL = "critical"
-
-
 class EngineRequestType(IntEnum):
     """engine请求类型"""
 

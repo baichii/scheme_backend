@@ -1,13 +1,16 @@
 import asyncio
 from dataclasses import dataclass
+from datetime import datetime
 
 from backend.engine.client import EngineClientMode
 from backend.engine.schemas import (
+    EngineAgentEventDispatchMessage,
     EngineCreateRequest,
     EngineEventRecord,
     EngineLogDispatchMessage,
     EngineQueryRequest,
     EngineResponse,
+    EngineSimTimeMessage,
     EngineStateChange,
     EngineStateDispatchMessage,
     EngineStopRequest,
@@ -33,18 +36,21 @@ class FakeEngineClient:
         task_duration_seconds: float = 10.0,
         stopping_seconds: float = 0.1,
         log_interval_seconds: float = 1.0,
+        sim_time_interval_seconds: float = 1.0,
     ) -> None:
         if pending_seconds < 0 or task_duration_seconds < 0 or stopping_seconds < 0:
             raise ValueError("Fake engine lifecycle durations cannot be negative")
-        if log_interval_seconds <= 0:
-            raise ValueError("Fake engine log interval must be greater than zero")
+        if log_interval_seconds <= 0 or sim_time_interval_seconds <= 0:
+            raise ValueError("Fake engine log and sim-time intervals must be greater than zero")
 
         self._pending_seconds = pending_seconds
         self._task_duration_seconds = task_duration_seconds
         self._stopping_seconds = stopping_seconds
         self._log_interval_seconds = log_interval_seconds
+        self._sim_time_interval_seconds = sim_time_interval_seconds
         self._tasks: dict[str, _FakeTaskRecord] = {}
         self._events: list[EngineEventRecord] = []
+        self._sim_runners: set[asyncio.Task[None]] = set()
         self._next_sequence = 1
         self._lock = asyncio.Lock()
         self._closed = False
@@ -80,6 +86,16 @@ class FakeEngineClient:
                     self._run_lifecycle(task_id),
                     name=f"fake-engine-{task_id}",
                 )
+
+            if task_ids:
+                deduce_id = request.body[0].biz_value.deduce_id
+                self._append_sim_time_event_locked(request.body[0], deduce_id)
+                sim_runner = asyncio.create_task(
+                    self._run_sim_time(task_ids, request.body[0], deduce_id),
+                    name=f"fake-engine-sim-time-{deduce_id or task_ids[0]}",
+                )
+                self._sim_runners.add(sim_runner)
+                sim_runner.add_done_callback(self._sim_runners.discard)
 
         return EngineResponse(code=200, data="", error_info="")
 
@@ -144,10 +160,12 @@ class FakeEngineClient:
                 for record in self._tasks.values()
                 if record.runner is not None and not record.runner.done()
             ]
+            runners.extend(runner for runner in self._sim_runners if not runner.done())
             for runner in runners:
                 runner.cancel()
             self._tasks.clear()
             self._events.clear()
+            self._sim_runners.clear()
 
         if runners:
             await asyncio.gather(*runners, return_exceptions=True)
@@ -157,6 +175,7 @@ class FakeEngineClient:
             await self._set_state(task_id, EngineTaskState.PENDING)
             await asyncio.sleep(self._pending_seconds)
             await self._set_state(task_id, EngineTaskState.RUNNING)
+            await self._append_agent_event(task_id)
             await self._run_and_emit_logs(task_id)
             await self._set_state(task_id, EngineTaskState.STOPPING)
             await asyncio.sleep(self._stopping_seconds)
@@ -200,7 +219,7 @@ class FakeEngineClient:
             if self._closed:
                 return
             record = self._tasks.get(task_id)
-            if record is None or record.state is not EngineTaskState.RUNNING:
+            if record is None or record.state is not EngineTaskState.RUNNING or record.definition.is_box:
                 return
             payload = EngineLogDispatchMessage(
                 biz_value=record.definition.biz_value.model_copy(deep=True),
@@ -208,6 +227,66 @@ class FakeEngineClient:
                 message=message,
             )
             self._append_event_locked(task_id, payload)
+
+    async def _append_agent_event(self, task_id: str) -> None:
+        async with self._lock:
+            if self._closed:
+                return
+            record = self._tasks.get(task_id)
+            if record is None or record.state is not EngineTaskState.RUNNING or record.definition.is_box:
+                return
+            payload = EngineAgentEventDispatchMessage(
+                biz_value=record.definition.biz_value.model_copy(deep=True),
+                level="info",
+                message=f"Task {task_id} emitted a runtime event",
+            )
+            self._append_event_locked(task_id, payload)
+
+    async def _run_sim_time(
+        self,
+        task_ids: list[str],
+        definition: EngineTaskDefinition,
+        deduce_id: str | None,
+    ) -> None:
+        try:
+            while True:
+                await asyncio.sleep(self._sim_time_interval_seconds)
+                async with self._lock:
+                    if self._closed:
+                        return
+                    active = any(
+                        (record := self._tasks.get(task_id)) is not None
+                        and record.state not in {EngineTaskState.END, EngineTaskState.ERROR}
+                        for task_id in task_ids
+                    )
+                    if not active:
+                        return
+                    self._append_sim_time_event_locked(definition, deduce_id)
+        except asyncio.CancelledError:
+            raise
+
+    def _append_sim_time_event_locked(
+        self,
+        definition: EngineTaskDefinition,
+        deduce_id: str | None,
+    ) -> None:
+        values = definition.env_config.env_instance_config
+        payload = EngineSimTimeMessage(
+            containerIp=values.get("ip") if isinstance(values.get("ip"), str) else None,
+            containerPort=values.get("port") if isinstance(values.get("port"), int) else None,
+            simTime=datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S"),
+            healthOrNot=True,
+        )
+        self._events.append(
+            EngineEventRecord(
+                sequence=self._next_sequence,
+                source="sim_time",
+                deduce_id=deduce_id,
+                task_id=None,
+                payload=payload,
+            )
+        )
+        self._next_sequence += 1
 
     def _append_state_event_locked(self, record: _FakeTaskRecord) -> None:
         payload = EngineStateDispatchMessage(
@@ -219,11 +298,12 @@ class FakeEngineClient:
     def _append_event_locked(
         self,
         task_id: str,
-        payload: EngineStateDispatchMessage | EngineLogDispatchMessage,
+        payload: (EngineStateDispatchMessage | EngineLogDispatchMessage | EngineAgentEventDispatchMessage),
     ) -> None:
         self._events.append(
             EngineEventRecord(
                 sequence=self._next_sequence,
+                deduce_id=payload.biz_value.deduce_id,
                 task_id=task_id,
                 payload=payload,
             )

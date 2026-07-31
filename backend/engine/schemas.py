@@ -126,10 +126,29 @@ class EngineLogDispatchMessage(EngineProtocolModel):
     message: str
 
 
-EngineDispatchMessage = EngineStateDispatchMessage | EngineLogDispatchMessage
+class EngineAgentEventDispatchMessage(EngineProtocolModel):
+    message_type: Literal["event"] = Field(default="event", alias="messageType")
+    biz_value: EngineBizValue = Field(alias="bizValue")
+    level: Literal["debug", "info", "warning", "error", "critical"] = "info"
+    message: str
+
+
+class EngineSimTimeMessage(EngineProtocolModel):
+    container_ip: str | None = Field(default=None, alias="containerIp")
+    container_port: int | None = Field(default=None, alias="containerPort")
+    sim_time: str = Field(alias="simTime")
+    health_or_not: bool = Field(default=True, alias="healthOrNot")
+
+
+EngineDispatchMessage = (
+    EngineStateDispatchMessage | EngineLogDispatchMessage | EngineAgentEventDispatchMessage
+)
+EngineRuntimePayload = EngineDispatchMessage | EngineSimTimeMessage
 
 
 class EngineEventRecord(EngineProtocolModel):
     sequence: int = Field(gt=0)
-    task_id: str
-    payload: EngineDispatchMessage
+    source: Literal["dispatch", "sim_time"] = "dispatch"
+    deduce_id: str | None = None
+    task_id: str | None = None
+    payload: EngineRuntimePayload

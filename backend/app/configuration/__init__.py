@@ -1,0 +1,1 @@
+"""Backend-owned product configuration."""

@@ -17,6 +17,7 @@ def create_engine_client(config: Settings = settings) -> EngineClient:
             task_duration_seconds=config.FAKE_ENGINE_TASK_DURATION_SECONDS,
             stopping_seconds=config.FAKE_ENGINE_STOPPING_SECONDS,
             log_interval_seconds=config.FAKE_ENGINE_LOG_INTERVAL_SECONDS,
+            sim_time_interval_seconds=getattr(config, "FAKE_ENGINE_SIM_TIME_INTERVAL_SECONDS", 1.0),
         )
     raise EngineClientConfigurationError("ENGINE_CLIENT_MODE=matrix is not implemented")
 

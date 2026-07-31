@@ -1,0 +1,20 @@
+schema_version: 1
+kind: scenario_type
+
+key: local_test
+name: 本地测试想定类型
+description: 用于验证环境连接、指令下发和三阵营流程的空态势想定类型
+
+environment_templates:
+  - local_test
+
+scenarios:
+  - local_test
+
+sides:
+  - key: red
+    name: 红方
+  - key: blue
+    name: 蓝方
+  - key: green
+    name: 绿方

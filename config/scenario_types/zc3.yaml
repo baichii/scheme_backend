@@ -1,0 +1,19 @@
+schema_version: 1
+kind: scenario_type
+
+key: zc3
+name: ZC3 想定类型
+description: ZC3 海空对抗想定及其兼容变体
+
+environment_templates:
+  - local_test
+  - pysim
+
+scenarios:
+  - zc3
+
+sides:
+  - key: red
+    name: 红方
+  - key: blue
+    name: 蓝方

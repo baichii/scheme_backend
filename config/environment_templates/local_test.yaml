@@ -1,0 +1,25 @@
+schema_version: 1
+kind: environment_template
+key: local_test
+name: 本地测试环境
+description: 连接本地部署的联调环境
+fields:
+  - key: ip
+    label: IP 地址
+    type: ipv4
+    required: true
+    default: null
+  - key: port
+    label: 端口
+    type: integer
+    required: true
+    minimum: 1
+    maximum: 65535
+    default: null
+runtime:
+  dispatch_queue:
+    name: scheme_play_lt
+    durable: true
+  simulation_time_queue:
+    name: scheme_sim_time_lt
+    durable: true

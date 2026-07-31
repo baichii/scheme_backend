@@ -27,7 +27,12 @@ class Settings(BaseSettings):
     FASTAPI_DOCS_URL: str = "/docs"
     FASTAPI_REDOC_URL: str = "/redoc"
     FASTAPI_OPENAPI_URL: str | None = "/openapi"
-    FASTAPI_STATIC_FILES: bool = False
+    CORS_ALLOWED_ORIGINS: list[str] = [
+        "http://127.0.0.1:4173",
+        "http://127.0.0.1:4174",
+        "http://localhost:4173",
+        "http://localhost:4174",
+    ]
 
     # datetime
     DATETIME_TIMEZONE: str = "Asia/Shanghai"
@@ -53,7 +58,7 @@ class Settings(BaseSettings):
     MINIO_ENDPOINT: str
     MINIO_ROOT_USER: str
     MINIO_ROOT_PASSWORD: str
-    AGENT_BUCKET: str = "agent"
+    RESOURCE_BUCKET: str = "scheme-resources"
 
     # log
     LOG_STD_LEVEL: str = "INFO"
@@ -80,6 +85,9 @@ class Settings(BaseSettings):
     FAKE_ENGINE_TASK_DURATION_SECONDS: float = 10.0
     FAKE_ENGINE_STOPPING_SECONDS: float = 0.1
     FAKE_ENGINE_LOG_INTERVAL_SECONDS: float = 1.0
+    FAKE_ENGINE_SIM_TIME_INTERVAL_SECONDS: float = 1.0
+    ENGINE_EVENT_POLL_INTERVAL_SECONDS: float = 0.05
+    RUNTIME_SSE_HEARTBEAT_SECONDS: float = 15.0
 
     # engine api路由
     ENGINE_CREATE: str = "/api/create"

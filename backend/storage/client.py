@@ -1,0 +1,9 @@
+from typing import Protocol
+
+
+class ObjectStorageClient(Protocol):
+    async def put(self, object_name: str, data: bytes, content_type: str) -> None: ...
+
+    async def get(self, object_name: str) -> bytes: ...
+
+    async def delete(self, object_name: str) -> None: ...

@@ -4,8 +4,11 @@ import pytest
 
 from backend.engine.fake import FakeEngineClient
 from backend.engine.schemas import (
+    EngineAgentEventDispatchMessage,
     EngineCreateRequest,
+    EngineLogDispatchMessage,
     EngineQueryRequest,
+    EngineSimTimeMessage,
     EngineStateDispatchMessage,
     EngineStopRequest,
     EngineTaskDefinition,
@@ -69,7 +72,28 @@ async def test_full_lifecycle_emits_matrix_state_and_log_messages():
             EngineTaskState.STOPPING,
             EngineTaskState.END,
         ]
-        assert any(event.payload.message_type == "log" for event in events)
+        assert any(isinstance(event.payload, EngineLogDispatchMessage) for event in events)
+        assert any(isinstance(event.payload, EngineAgentEventDispatchMessage) for event in events)
+        assert any(isinstance(event.payload, EngineSimTimeMessage) for event in events)
+        agent_event = next(
+            event for event in events if isinstance(event.payload, EngineAgentEventDispatchMessage)
+        )
+        assert agent_event.payload.model_dump(mode="json", by_alias=True) == {
+            "messageType": "event",
+            "bizValue": {
+                "dispatchQueue": {"name": "scheme", "durable": True, "needToDeclare": True},
+                "simTimeQueue": {"name": "", "durable": True, "needToDeclare": True},
+                "deduceID": "deduction-1",
+                "deduceTaskID": "task-1",
+            },
+            "level": "info",
+            "message": "Task task-1 emitted a runtime event",
+        }
+        sim_time = next(event for event in events if isinstance(event.payload, EngineSimTimeMessage))
+        assert sim_time.source == "sim_time"
+        assert sim_time.deduce_id == "deduction-1"
+        assert sim_time.task_id is None
+        assert sim_time.payload.health_or_not is True
         assert [event.sequence for event in events] == list(range(1, len(events) + 1))
         assert state_events[0].payload.model_dump(mode="json", by_alias=True) == {
             "messageType": "state",
